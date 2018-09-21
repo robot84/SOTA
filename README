@@ -7,3 +7,5 @@ Both files use JavaScript, so they work only in JS enabled browsers.
 
 get-distanse-beetween-locators.bash - do the same as above, but using curl.
 	So it works fine without any web browser. Just Linux shell :)
+
+get-locators.bash - Create table with all locators of summits in specific Region
