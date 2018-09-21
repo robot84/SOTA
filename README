@@ -1,0 +1,9 @@
+1.php - automaticly send POST form to QTH locator calculator
+	you need only fill parameters like below:
+	http://kamery-tatry.ovh/SOTA/1.php?mygrid=JO70wa&fagrid=JO90xa
+1.html - do the same as 1.php but not automaticly. You need to press Submit button.
+
+Both files use JavaScript, so they work only in JS enabled browsers.
+
+get-distanse-beetween-locators.bash - do the same as above, but using curl.
+	So it works fine without any web browser. Just Linux shell :)
