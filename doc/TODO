@@ -1,0 +1,12 @@
+Write in README how to run all tests
+
+Save partial results of calculating distance for QSOs.
+You would not like to compute everything from the beggining when your internet connection goes down.
+
+Handle situations when no information about chaser in our db and we can't calculate distance for this particular QSO
+
+
+Fixes:
+src/get-summits-locators.bash:
+	if data for the same summit is collected more than once, and is updated, so old locator is different than new, old locator is still used instead of actual one! (grep is matching first matching line. line with lower number is the old one.
+	case when summits-locator.dat file doesn't exist and we have no permission to create it is not handled 

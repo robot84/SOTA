@@ -12,6 +12,10 @@ SLEEP_TIMER=3
 # show RS report?
 REPORT_SHOW=false
 
+#
+SUMMIT_QTH_LOCATORS_FILE="../resources/summits-locators.dat"
+#
+CHASERS_QTH_LOCATORS_FILE="../resources/chasers-locators.dat"
 
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
 then
@@ -33,13 +37,51 @@ echo
 exit 127
 fi
 
+cd $(dirname $0)
+
+touch $TMP_FILE
+if [ ! -f $TMP_FILE ]
+then
+echo "$0: Error: Can not create file $TMP_FILE"
+exit 1
+fi
+
+if [ ! -w $TMP_FILE ]
+then
+echo "$0: Error: Can not write to file $TMP_FILE"
+exit 1
+fi
+
+if [ ! -f $SUMMIT_QTH_LOCATORS_FILE ]
+then
+echo "$0: Error: Can not open file $SUMMIT_QTH_LOCATORS_FILE Check if file exists"
+exit 2
+fi
+
+if [ ! -r $SUMMIT_QTH_LOCATORS_FILE ]
+then
+echo "$0: Error: Can not open file $SUMMIT_QTH_LOCATORS_FILE for reading"
+exit 2
+fi
+
+if [ ! -f $CHASERS_QTH_LOCATORS_FILE ]
+then
+echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE Check if file exists"
+exit 3
+fi
+
+if [ ! -r $CHASERS_QTH_LOCATORS_FILE ]
+then
+echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE for reading"
+exit 3
+fi
+
+
 cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
 while read SUMMIT D4 D5 D6 CALLSIGN D10;
 do
-SUMMIT_QTH_LOCATORS_FILE="SP-BZ-QTH-Locators.txt"
-CHASERS_QTH_LOCATORS_FILE="SP-chasers-locators.txt"
 SUMMIT_QTH_LOCATOR=`cat ${SUMMIT_QTH_LOCATORS_FILE} | grep "$SUMMIT" | awk '{print $2}'`
 CHASERS_QTH_LOCATOR=`cat ${CHASERS_QTH_LOCATORS_FILE} | grep "$CALLSIGN" | awk '{print $2}'`
 

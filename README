@@ -29,9 +29,34 @@ How to use this machine? There are so many scripts!
 
 You have two options. Generate everything from scratch, if this is your first use of the scripts on this computer, or pass over some steps, if you have some work done.
 
-1. Generate everything from scratch:
-Go to http://sotadata.org.uk/summits.aspx, select desired Association and Region.
-At the bottom of the page there is text:
-"NOTE : You can download a CSV file containing a list of all summits by clicking here"
-So click HERE :)
+Generating everything from scratch:
+------------
+1. Generate summit info tables
+Go to http://sotadata.org.uk/summits.aspx, select desired Association and Region. Click Submit button.
+Create empty text file somewhere. Name it my-favourite-region-info.txt or similar. Exact file name
+doesn't matter.
+Select and Copy the table of summits from sotadata site, then paste it to this file.
+Get attention to select only the table with data, not all text on site!
+Get attention to select only rows with summits data. Don't select header section!
+
+Run script:
+./get-summits-locators.bash my-favourite-region-info.txt
+
+Argument must be a path to text file, that you created before.
+
+2. Generate chasers info tables
+
+
+3. Generate QSO's distances 
+Log in to http://sotadata.org.uk/
+Navigate to View Results->My Results->My Activator Log
+Go to bottom of the page and click buttom 'Download complete log'
+Save the file.
+Use this file in below command:
+
+cat my-downloaded-activator.log | ./compute-distances-for-activator-log-file.bash  | tee  my-distances.txt
+
+
+Wait for results :)
+It can take some time.
 

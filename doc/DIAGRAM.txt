@@ -1,0 +1,18 @@
+
+http://sotadata.org.uk
+   +------------>   SUMMITS info  -> SUMMIT NAME & QTH table  --> QTH1
+   |                   /|\                                         |
+   |                    |                                          |
+   |                	|                                          |
+   |                Activator                                     \|/
+I N T E R           goes to
+  N E T             summit                                https://www.chris.org/
+   |                   and                                     QTH distance
+   |                Activator                                  calculation  -----> QSO distance
+   |                have QSO                                     /|\
+   |                with chaser                                   |
+   |                    |                                         |
+   |                	|                                         |
+   |                   \|/                                        |
+   +------------>   CHASERS info -> CHASERS SIGN & QTH table --> QTH2
+   http://qrz.com
