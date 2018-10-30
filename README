@@ -1,6 +1,10 @@
-1.php - automaticly send POST form to QTH locator calculator
-	you need only fill parameters like below:
-	http://kamery-tatry.ovh/SOTA/1.php?mygrid=JO70wa&fagrid=JO90xa
+SOTA distance calculator
+SO9ARC (C) 2018
+--------------------------
+
+1.php - automatically sends POST form to QTH locator calculator web site
+	You need only to fill parameters like below:
+	http://your-web-server.com/SOTA/1.php?mygrid=JO70wa&fagrid=JO90xa
 1.html - do the same as 1.php but not automaticly. You need to press Submit button.
 
 Both files use JavaScript, so they work only in JS enabled browsers.
@@ -8,4 +12,26 @@ Both files use JavaScript, so they work only in JS enabled browsers.
 get-distanse-beetween-locators.bash - do the same as above, but using curl.
 	So it works fine without any web browser. Just Linux shell :)
 
-get-locators.bash - Create table with all locators of summits in specific Region
+get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member)
+Usage: ./get-callsign-info-page.bash <callsign>
+Example: ./get-callsign-info-page.bash SO9ARC
+
+get-multiplecallsigns-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database. Use get-callsign-info-page.bash script to get multiple callsigns info. Prepare list of callsigns in text file SP-chasers_calls.txt, one by line. You can also use other file with option -f <filename>
+No output is generated when working. 
+
+create-pair-callsign-locator-from-full-qrz-com-info-page.bash 
+	Prints to stdout pair callsign-locator, one pair in line
+	for each callsign in database (obtained via get-callsign-info-page.bash, get-multiplecallsigns-info-page.bash or similar script)
+If no locator found on qrz.com for callsign, locator in output is set to ??????
+
+
+How to use this machine? There are so many scripts!
+
+You have two options. Generate everything from scratch, if this is your first use of the scripts on this computer, or pass over some steps, if you have some work done.
+
+1. Generate everything from scratch:
+Go to http://sotadata.org.uk/summits.aspx, select desired Association and Region.
+At the bottom of the page there is text:
+"NOTE : You can download a CSV file containing a list of all summits by clicking here"
+So click HERE :)
+
