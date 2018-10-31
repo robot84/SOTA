@@ -2,15 +2,7 @@ SOTA distance calculator
 SO9ARC (C) 2018
 --------------------------
 
-1.php - automatically sends POST form to QTH locator calculator web site
-	You need only to fill parameters like below:
-	http://your-web-server.com/SOTA/1.php?mygrid=JO70wa&fagrid=JO90xa
-1.html - do the same as 1.php but not automaticly. You need to press Submit button.
-
-Both files use JavaScript, so they work only in JS enabled browsers.
-
 get-distanse-beetween-locators.bash - do the same as above, but using curl.
-	So it works fine without any web browser. Just Linux shell :)
 
 get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member)
 Usage: ./get-callsign-info-page.bash <callsign>
