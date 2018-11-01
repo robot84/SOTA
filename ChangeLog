@@ -1,0 +1,31 @@
+ChangeLog
+
+
+Major changes:
+- written out first 4 tests.
+- now without cookie script get-callsign-info-page.bash exits
+
+Unofficial changes (work in progress):
+- log errors to log/error.log file. Works for one script for this day.
+- return codes (to OS) now have human readable labels in code
+- added config.cfg file when you can set paths for some files, 
+	without doing this inside code
+
+
+
+
+
+
+This is in Polish.
+It will be translated soon.
+
+-napisalem jeden test dla get-callsign-info-page.bash
+-daleko posunalem logowanie do pliku dla get-callsign-info-page.bash
+-zmiana numerow exit n, na czytelne nazwy dla czlowieka
+-obsluga pliku config.cfg, gdyz kilka skryptow potrzebuje tych samych danych
+	pliki z katalogu database/ i trza to jakos shareowac
+	rowniez plik error.log bedzie jeden dla wszystkich skryptow
+- w logowaniu do pliku wyzwaniem bylo utworzenie daty w formacie sysloga, bo mam polskie locale, a nie EN
+- get-callsign-info-page.bash - obsluga sytuacji braku ciasteczka.
+- get-callsign-info-page.bash - zamiana zahardcodowanych w kodzie wartosci na zmienne
+-dopisalem kolejne dwa testy dla get-callsign-info-page.bash
