@@ -12,7 +12,7 @@
 
 #
 #
-SUMMIT_QTH_LOCATORS_FILE="../resources/summits-locators.dat"
+SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
 
 
 if [ "$#" -ne 1 ]

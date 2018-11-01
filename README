@@ -37,6 +37,34 @@ Run script:
 Argument must be a path to text file, that you created before.
 
 2. Generate chasers info tables
+You can do it semi-automaticly when you write out chaser's sign and script search for a QTH locator for that sign and store this information in database file,
+or manually, where you must manually obtain locator for a chaser and put it in the file. Below I described these two possibilies.
+
+Semi-automatic way:
+a) Run script to download information about chaser's QTH locator:
+
+	./get-callsign-info-page.bash <Chaser_callsign>
+
+b) repeat for each chaser you know ;)
+c) When all chasers are added to database, generate a table containing mappings chaser_callsign vs his_qth_locator:
+
+	./create-pair-callsign-locator-from-full-qrz-com-info-page.bash > chasers_locators.dat
+d) That is all.
+
+
+Manual way:
+a) find qth locator for a chaser 
+b) open resources/chasers_locators.dat in your favourite text editor
+c) paste chaser's callsign and his QTH locator, one chaser per line.
+	Chaser's callsign should be first, at the beggining of the line,
+	and after it, separated by a space charakter, paste QTH locator.
+	QTH Locator must have 6 charakters. Not more, not less.
+	Example line of manually_paired.txt file:
+	SQ9RNT JO90id
+
+d) Save changes and close the file.
+f) Repeat all steps for each chaser your are interested in
+
 
 
 3. Generate QSO's distances 

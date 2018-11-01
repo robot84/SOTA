@@ -10,3 +10,4 @@ Fixes:
 src/get-summits-locators.bash:
 	if data for the same summit is collected more than once, and is updated, so old locator is different than new, old locator is still used instead of actual one! (grep is matching first matching line. line with lower number is the old one.
 	case when summits-locator.dat file doesn't exist and we have no permission to create it is not handled 
+- perform checking if on system curl and html2text is installed (maybe other dependiences?)

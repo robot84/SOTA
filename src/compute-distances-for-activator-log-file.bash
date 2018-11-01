@@ -2,9 +2,12 @@
 #
 # Version 0.0.2
 # usage: cat activator-log.csv | ./this_script [-r] | tee distances.txt
+#
+# Revision history:
+#
 
 # some temp file
-TMP_FILE="/tmp/.activator.tmp"
+TMP_FILE=$(mktemp)
 
 # without this timer we overload distance calculating server and doesn't get a response from it
 SLEEP_TIMER=3
@@ -13,9 +16,9 @@ SLEEP_TIMER=3
 REPORT_SHOW=false
 
 #
-SUMMIT_QTH_LOCATORS_FILE="../resources/summits-locators.dat"
+SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
 #
-CHASERS_QTH_LOCATORS_FILE="../resources/chasers-locators.dat"
+CHASERS_QTH_LOCATORS_FILE="../resources/chasers_locators.dat"
 
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
 then
