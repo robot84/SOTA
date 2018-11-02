@@ -67,13 +67,40 @@ echo Nie ma ciasteczek!
 	exit $ERROR__NO_COOKIE
 fi
 
-if [ "$#" -ne 1 ]
-then 
-     echo "Usage:"
-	 echo "$0 <callsign>"
+if [ "$#" -lt 1 ]
+then
+echo "$0: Mandatory argument ommited."
+echo "Try '$0 --help' for more information."
 	 f_log_msg $LOG_FILE ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
 exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
 fi
+
+POSITIONAL=()
+	while [[ $# -gt 0 ]]
+	do
+	key="$1"
+
+	case $key in
+	-h|--help)
+	echo ""
+	echo "Usage:"
+	echo "${0##*/} <callsign>"
+	echo
+exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
+	;;
+	-*)
+	echo "$0: invalid option -- '$1'"
+	echo "Try '$0 --help' for more information."
+	exit
+	;;
+	*) 
+	POSITIONAL+=("$1") # save it in an array for later
+	shift
+	;;
+	esac
+	done
+	set -- "${POSITIONAL[@]}" # restore positional parameters
+
 
 CALLSIGN="$1"
 
