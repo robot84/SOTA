@@ -14,7 +14,7 @@ t002_cookie_validation() {
 rm SO9ARC/database/SQ9KCN.log
 src/get-callsign-info-page.bash SQ9KCN >> /dev/null
 src/create-pair-callsign-locator-from-full-qrz-com-info-page.bash SQ9KCN | \
-grep 'KO00ac' >> /dev/null \
+grep 'SQ9KCN KO00ac' >> /dev/null \
 && echo Passed || echo Failed
 }
 
