@@ -17,6 +17,28 @@ STARTING_DIR=`pwd`
 cd $(dirname $0)
 source ../resources/config.cfg
 
+POSITIONAL=()
+	while [[ $# -gt 0 ]]
+	do
+	key="$1"
+
+	case $key in
+	-h|--help)
+	echo ""
+	echo "Usage:"
+	echo "${0##*/} > chasers_locators.dat "
+	echo
+	exit 1
+	;;
+	*)
+	echo "$0: invalid option -- '$1'"
+	echo "Try '$0 --help' for more information."
+	exit
+	;;
+	esac
+	done
+
+
 cd "${DB_DIRECTORY}"
 for VAR in *.log
 do
