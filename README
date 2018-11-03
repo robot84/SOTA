@@ -21,6 +21,38 @@ How to use this machine? There are so many scripts!
 
 You have two options. Generate everything from scratch, if this is your first use of the scripts on this computer, or pass over some steps, if you have some work done.
 
+How to obtain a cookie for qrz.com
+---------------------------------
+-Install Google Chrome web browser
+-Create account on www.qrz.com.
+-Search in www.google.com for this phrase and go to first result:
+'cookies.txt chrome web store'
+-Click 'Add to Chrome' button on the Chrome Web Store page
+-Login to your account on www.qrz.com
+-Click on the Cookies.txt icon in Chrome
+-In new opened window search for phase:
+"HTTP Cookie File for qrz.com by Genuinous.
+To download cookies for this tab _click here_"
+and click "click here" hyperlink.
+Cookie will download to your computer.
+(is named "cookies.txt" and it looks like this inside:
+
+# HTTP Cookie File downloaded with cookies.txt by Genuinous @genuinous
+# This file can be used by wget, curl, aria2c and other standard compliant tools.
+# Usage Examples:
+#   1) wget -x --load-cookies cookies.txt "https://www.qrz.com/"
+#   2) curl --cookie cookies.txt "https://www.qrz.com/"
+#   3) aria2c --load-cookies cookies.txt "https://www.qrz.com/"
+#
+.qrz.com	TRUE	/	FALSE	1604327123	_ga	GA1.2.2062712348.1541123234
+.qrz.com	TRUE	/	FALSE	1541341523	_gid	GA1.12340633751.1234235110
+www.qrz.com	FALSE	/	FALSE	1856874323	homestyle	grid
+.qrz.com	TRUE	/	FALSE	1541341513	QRZenabled	1
+.qrz.com	TRUE	/	FALSE	1543847120	xf_session	fa6fweqgsfger4353rqeg34tcb57750b
+
+Now transfer cookie file  to this app's resources/ directory.
+From Windows you can do it by WinSCP or similar application.
+
 Generating everything from scratch:
 ------------
 1. Generate summit info tables
