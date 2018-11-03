@@ -81,10 +81,6 @@ function calculate_distance() {
 						fi
 
 }
-# SHORT_FORMAT_ENABLED=no
-#| awk '{print $7,$8
-#Distance between JO80WA & JO90XA is 148.84 km (
-
 
 
 		parse_parameters $@
