@@ -3,7 +3,52 @@
 cd $(dirname $0)
 . load_config_file.bash
 
-TMP_FILE=$(mktemp)
+if [ "$#" -lt 1 ]
+then
+echo "$0: Mandatory argument ommited."
+echo "Try '$0 --help' for more information."
+exit 1
+fi
+
+POSITIONAL=()
+	while [[ $# -gt 0 ]]
+	do
+	key="$1"
+
+	case $key in
+	-h|--help)
+	echo "Usage:"
+	echo "cat qso-log.csv | ${0##*/}"
+	echo "Analyze your QSO log file against future issues, you can
+	experience, when you run compute-distances-for-activator-log.bash on it"
+	echo
+	echo -e "qso-log.csv\tdownload it from http://sotadata.org.uk/"
+	echo -e "\t\tTo do this, navigate via menu:"
+	echo -e "\t\tView Results->My results->My Activator Log"
+	echo -e "\t\tAt the bottom of this page click 'Download complete log'"
+	echo
+
+	exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
+	;;
+	-*)
+	echo "$0: invalid option -- '$1'"
+	echo "Try '$0 --help' for more information."
+	exit
+	;;
+	*)
+	POSITIONAL+=("$1") # save it in an array for later
+	shift
+	;;
+	esac
+	done
+	set -- "${POSITIONAL[@]}" # restore positional parameters
+
+
+
+
+
+
+		 TMP_FILE=$(mktemp)
 cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 
 while read SUMMIT D4 D5 D6 CALLSIGN D10;
