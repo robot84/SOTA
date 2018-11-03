@@ -1,6 +1,6 @@
 SOTA distance calculator
 SO9ARC (C) 2018
---------------------------
+-------------------------
 
 get-distanse-beetween-locators.bash - do the same as above, but using curl.
 
