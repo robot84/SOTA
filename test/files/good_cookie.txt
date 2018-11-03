@@ -1,0 +1,12 @@
+# HTTP Cookie File downloaded with cookies.txt by Genuinous @genuinous
+# This file can be used by wget, curl, aria2c and other standard compliant tools.
+# Usage Examples:
+#   1) wget -x --load-cookies cookies.txt "https://www.qrz.com/"
+#   2) curl --cookie cookies.txt "https://www.qrz.com/"
+#   3) aria2c --load-cookies cookies.txt "https://www.qrz.com/"
+#
+.qrz.com	TRUE	/	FALSE	1604327123	_ga	GA1.2.2062715588.1541255110
+.qrz.com	TRUE	/	FALSE	1541341523	_gid	GA1.2.580633751.1541255110
+www.qrz.com	FALSE	/	FALSE	1856874323	homestyle	grid
+.qrz.com	TRUE	/	FALSE	1541341513	QRZenabled	1
+.qrz.com	TRUE	/	FALSE	1543847120	xf_session	fa6fae95ecdc052b7b252dbccb57750b
