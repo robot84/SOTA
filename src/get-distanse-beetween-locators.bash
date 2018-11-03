@@ -53,18 +53,26 @@ function parse_parameters(){
 }
 
 
-function calculate_distance() {
-	TMP_FILE=$(mktemp)
+		function check_if_callsigns_have_valid_format() {
 		if [[ "$1" =~ $QTH_LOCATOR_PATTERN ]] && [[ "$2" =~ $QTH_LOCATOR_PATTERN ]]
 			then
-				curl -s -X POST --data "mygrid=$1&fagrid=$2" https://www.chris.org/cgi-bin/showdis > "$TMP_FILE"
+		:
 		else
 			echo "Error: QTHlocator must be 6 characters length and in format AB01CD"
+			echo "This is not case-sensitive"
 				exit 1
 				fi
 
-				RESULT_DATA=`cat "$TMP_FILE" | grep "Distance between"  | grep -o ".*," | tr -d "," `
 
+		}
+function calculate_distance() {
+				TMP_FILE=$(mktemp)
+				curl -s -X POST --data "mygrid=$1&fagrid=$2" https://www.chris.org/cgi-bin/showdis > "$TMP_FILE"
+				RESULT_DATA=`cat "$TMP_FILE" | grep "Distance between"  | grep -o ".*," | tr -d "," `
+				rm -f  "$TMP_FILE"
+}
+
+function print_distance() {
 				if [ $SHORT_FORMAT_ENABLED = yes ]
 					then
 						if [ $MILES_AS_UNIT = yes ]
@@ -82,4 +90,6 @@ function calculate_distance() {
 
 
 		parse_parameters $@
+		check_if_callsigns_have_valid_format "${POSITIONAL[@]}"
 		calculate_distance "${POSITIONAL[@]}"
+		print_distance
