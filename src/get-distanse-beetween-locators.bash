@@ -55,8 +55,6 @@ function parse_parameters(){
 
 function calculate_distance() {
 	TMP_FILE=$(mktemp)
-		echo 1: $1
-		echo 2: $2
 		if [[ "$1" =~ $QTH_LOCATOR_PATTERN ]] && [[ "$2" =~ $QTH_LOCATOR_PATTERN ]]
 			then
 				curl -s -X POST --data "mygrid=$1&fagrid=$2" https://www.chris.org/cgi-bin/showdis > "$TMP_FILE"
