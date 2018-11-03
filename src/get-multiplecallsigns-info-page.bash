@@ -2,18 +2,17 @@
 #
 
 SP_CHASERS_FILE=""
-CONFIG_FILE="../resources/config.cfg"
+
 cd $(dirname $0)
-if [ -r ${CONFIG_FILE} ]
+. load_config_file.bash
+
+if [ "$#" -lt 1 ]
 then
-.  ${CONFIG_FILE}
-else
-echo "Cannot open config file for reading!"
-echo "Check if file exists and you have permissions to read it."
-echo "Path to file: ${CONFIG_FILE}"
-echo "Cannot continue. Exiting..."
-exit $ERROR__CANNOT_LOAD_CONFIG_FILE
+echo "${0##*/}: Mandatory argument ommited."
+echo "Try '${0##*/} --help' for more information."
+exit 1
 fi
+
 
 
 POSITIONAL=()
@@ -25,7 +24,7 @@ case $key in
      -h|--help)
 		echo "Usage:"
 		echo "$0 <-f filename> "
-		echo Searching QTH Locators for callsigns from file."
+		echo "Searching QTH Locators for callsigns from file."
 		echo
 		echo -e " -f,--filename\tfile with callsign list, one callsign per line"
 		echo
@@ -72,13 +71,13 @@ exit
 }
 
 
-if [ -e  $SP_CHASERS_FILE ]
+if [ -e  "$SP_CHASERS_FILE" ]
 then
 	while read CALLSIGN; do
 	bash ./get-callsign-info-page.bash $CALLSIGN
-	  done <$SP_CHASERS_FILE
+	  done < "$SP_CHASERS_FILE"
 else
-	echo "File $SP_CHASERS_FILE doesn't exist!";
+	echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
 	echo "Create it with one callsign per line.";
 	exit 1
 fi

@@ -15,7 +15,8 @@
 
 STARTING_DIR=`pwd`
 cd $(dirname $0)
-source ../resources/config.cfg
+. load_config_file.bash
+
 
 POSITIONAL=()
 	while [[ $# -gt 0 ]]

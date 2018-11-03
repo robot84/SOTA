@@ -10,12 +10,10 @@
 # 0.1.3 different exit codes for different errors
 # 0.1.4 use config.cfg for loading information about database localization
 
-CONFIG_FILE="../resources/config.cfg"
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
 ERROR__CALLSIGN_DOESNT_MATCH_PATTERN=2
 ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED=3
-ERROR__CANNOT_LOAD_CONFIG_FILE=4
 ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING=5
 ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
 
@@ -46,16 +44,7 @@ echo "$LOG_DATE $LOG_HOST $LOG_PROCESS[$LOG_PID]: $LOG_MSG" >> "${LOG_FILE_NAME}
 
 ### Main ###
 cd $(dirname $0)
-if [ -r ${CONFIG_FILE} ]
-then
-.  ${CONFIG_FILE}
-else
-echo "Cannot open config file for reading!"
-echo "Check if file exists and you have permissions to read it."
-echo "Path to file: ${CONFIG_FILE}"
-echo "Cannot continue. Exiting..."
-exit $ERROR__CANNOT_LOAD_CONFIG_FILE
-fi
+. load_config_file.bash
 
 if [ ! -r ${COOKIE_FILENAME} ]
 then

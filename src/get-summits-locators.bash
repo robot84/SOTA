@@ -13,6 +13,8 @@
 #
 #
 SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
+cd $(dirname $0)
+. load_config_file.bash
 
 
 if [ "$#" -ne 1 ]

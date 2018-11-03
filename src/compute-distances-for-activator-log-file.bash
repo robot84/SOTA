@@ -20,6 +20,9 @@ SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
 #
 CHASERS_QTH_LOCATORS_FILE="../resources/chasers_locators.dat"
 
+cd $(dirname $0)
+. load_config_file.bash
+
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
 then
 REPORT_SHOW=true
