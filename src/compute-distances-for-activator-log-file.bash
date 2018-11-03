@@ -1,10 +1,5 @@
 #!/bin/bash
 #
-# Version 0.0.2
-# usage: cat activator-log.csv | ./this_script [-r] | tee distances.txt
-#
-# Revision history:
-#
 
 # some temp file
 TMP_FILE=$(mktemp)
@@ -14,11 +9,6 @@ SLEEP_TIMER=3
 
 # show RS report?
 REPORT_SHOW=false
-
-#
-SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
-#
-CHASERS_QTH_LOCATORS_FILE="../resources/chasers_locators.dat"
 
 cd $(dirname $0)
 . load_config_file.bash
@@ -58,15 +48,15 @@ echo "$0: Error: Can not write to file $TMP_FILE"
 exit 1
 fi
 
-if [ ! -f $SUMMIT_QTH_LOCATORS_FILE ]
+if [ ! -f "$SUMMITS_QTH_LOCATORS_FILE" ]
 then
-echo "$0: Error: Can not open file $SUMMIT_QTH_LOCATORS_FILE Check if file exists"
+echo "$0: Error: Can not open file $SUMMITS_QTH_LOCATORS_FILE Check if file exists"
 exit 2
 fi
 
-if [ ! -r $SUMMIT_QTH_LOCATORS_FILE ]
+if [ ! -r "$SUMMITS_QTH_LOCATORS_FILE" ]
 then
-echo "$0: Error: Can not open file $SUMMIT_QTH_LOCATORS_FILE for reading"
+echo "$0: Error: Can not open file $SUMMITS_QTH_LOCATORS_FILE for reading"
 exit 2
 fi
 
@@ -88,8 +78,8 @@ cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
 while read SUMMIT D4 D5 D6 CALLSIGN D10;
 do
-SUMMIT_QTH_LOCATOR=`cat ${SUMMIT_QTH_LOCATORS_FILE} | grep "$SUMMIT" | awk '{print $2}'`
-CHASERS_QTH_LOCATOR=`cat ${CHASERS_QTH_LOCATORS_FILE} | grep "$CALLSIGN" | awk '{print $2}'`
+SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT" | awk '{print $2}'`
+CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN" | awk '{print $2}'`
 
 
 if [ -z $CHASERS_QTH_LOCATOR ]

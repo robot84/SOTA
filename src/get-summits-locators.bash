@@ -1,18 +1,8 @@
 #!/bin/bash
 # This script extract summits' QTH locators from region info pasted from sotadata.org.uk/summits.aspx
 #
-# Robert Zabkiewicz (c) 2018
-# Version 0.0.3
-#
-# Revision history:
-# 0.0.1		initial version
-# 0.0.2		fixed bug, if user paste table with header, now it is ok
-# 0.0.3		output to file, instead of stdout
-# 0.0.4		pass to out only data that match pattern 'summit_number locator'
-
 #
 #
-SUMMIT_QTH_LOCATORS_FILE="../resources/summits_locators.dat"
 cd $(dirname $0)
 . load_config_file.bash
 
@@ -34,12 +24,12 @@ exit 1
 fi
 
 
-if [ -f $(dirname $0)/$SUMMIT_QTH_LOCATORS_FILE ] && [ ! -w $(dirname $0)/$SUMMIT_QTH_LOCATORS_FILE ]
+if [ -f "$(dirname $0)/$SUMMITS_QTH_LOCATORS_FILE" ] && [ ! -w "$(dirname $0)/$SUMMITS_QTH_LOCATORS_FILE" ]
 then
-echo "$0: Error: Can not write to file $SUMMIT_QTH_LOCATORS_FILE"
+echo "$0: Error: Can not write to file $SUMMITS_QTH_LOCATORS_FILE"
 exit 1
 fi
 
-sed 's/ /_/g' ${1} | awk '{print $1, $7}' | grep -P '\w+/\w+-\d+ \w\w\d\d\w\w' >> $(dirname $0)/$SUMMIT_QTH_LOCATORS_FILE
+sed 's/ /_/g' ${1} | awk '{print $1, $7}' | grep -P '\w+/\w+-\d+ \w\w\d\d\w\w' >> "$(dirname $0)/$SUMMITS_QTH_LOCATORS_FILE"
 
 
