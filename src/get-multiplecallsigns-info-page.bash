@@ -1,13 +1,20 @@
 #!/bin/bash
 #
-#
-#
-# VER=0.0.4
-#
-# Revisions:
-# 0.0.4 added trap ctrl+c here
 
-SP_CHASERS_FILE="SP-chasers_calls.txt"
+SP_CHASERS_FILE=""
+CONFIG_FILE="../resources/config.cfg"
+cd $(dirname $0)
+if [ -r ${CONFIG_FILE} ]
+then
+.  ${CONFIG_FILE}
+else
+echo "Cannot open config file for reading!"
+echo "Check if file exists and you have permissions to read it."
+echo "Path to file: ${CONFIG_FILE}"
+echo "Cannot continue. Exiting..."
+exit $ERROR__CANNOT_LOAD_CONFIG_FILE
+fi
+
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -17,13 +24,12 @@ key="$1"
 case $key in
      -h|--help)
 		echo "Usage:"
-		echo "$0 [-f filename] "
+		echo "$0 <-f filename> "
+		echo Searching QTH Locators for callsigns from file."
 		echo
 		echo -e " -f,--filename\tfile with callsign list, one callsign per line"
 		echo
-		echo "If no option used, file SP-chasers_calls.txt must exist in current directory"
-		echo "and contains callsign list, in one callsign per line manner."
-		exit
+		exit 1
 	;;
 	-f|--callsigns-list)
 	SP_CHASERS_FILE="$2"
@@ -58,9 +64,9 @@ trap ctrl_c INT
 
 function ctrl_c() {
 echo "** Trapped CTRL-C"
-if [ -e "database/$CALLSIGN.log" ]
+if [ -e "${DB_DIRECTORY}/$CALLSIGN.log" ]
 then
-rm "database/$CALLSIGN.log"
+rm "${DB_DIRECTORY}/$CALLSIGN.log"
 fi
 exit
 }

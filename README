@@ -2,6 +2,8 @@ SOTA distance calculator
 SO9ARC (C) 2018
 -------------------------
 
+Description of all the scripts in suite
+------------------------------
 get-distanse-beetween-locators.bash - do the same as above, but using curl.
 
 get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member)
@@ -17,8 +19,10 @@ create-pair-callsign-locator-from-full-qrz-com-info-page.bash
 If no locator found on qrz.com for callsign, locator in output is set to ??????
 
 
-How to use this machine? There are so many scripts!
 
+
+How to use this suite? There are so many scripts!
+----------------------------------------
 You have two options. Generate everything from scratch, if this is your first use of the scripts on this computer, or pass over some steps, if you have some work done.
 
 How to obtain a cookie for qrz.com
@@ -54,8 +58,9 @@ Now transfer cookie file  to this app's resources/ directory.
 From Windows you can do it by WinSCP or similar application.
 
 Generating everything from scratch:
-------------
+=========================================
 1. Generate summit info tables
+=========================================
 Go to http://sotadata.org.uk/summits.aspx, select desired Association and Region. Click Submit button.
 Create empty text file somewhere. Name it my-favourite-region-info.txt or similar. Exact file name
 doesn't matter.
@@ -68,7 +73,10 @@ Run script:
 
 Argument must be a path to text file, that you created before.
 
+
+=========================================
 2. Generate chasers info tables
+=========================================
 You can do it semi-automaticly when you write out chaser's sign and script search for a QTH locator for that sign and store this information in database file,
 or manually, where you must manually obtain locator for a chaser and put it in the file. Below I described these two possibilies.
 
@@ -77,7 +85,10 @@ a) Run script to download information about chaser's QTH locator:
 
 	./get-callsign-info-page.bash <Chaser_callsign>
 
-b) repeat for each chaser you know ;)
+b) repeat for each chaser you know ;) or put all callsigns for which you need to obtain a QTH locator in file and run this script against this file:
+
+	./get-multiplecallsigns-info-page.bash -f file_with_callsigns_one_per_line
+
 c) When all chasers are added to database, generate a table containing mappings chaser_callsign vs his_qth_locator:
 
 	./create-pair-callsign-locator-from-full-qrz-com-info-page.bash > chasers_locators.dat
@@ -99,7 +110,9 @@ f) Repeat all steps for each chaser your are interested in
 
 
 
+=========================================
 3. Generate QSO's distances 
+=========================================
 Log in to http://sotadata.org.uk/
 Navigate to View Results->My Results->My Activator Log
 Go to bottom of the page and click buttom 'Download complete log'
