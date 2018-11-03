@@ -63,7 +63,7 @@ function calculate_distance() {
 				exit 1
 				fi
 
-				RESULT_DATA=`cat "$TMP_FILE" | grep "Distance between"`
+				RESULT_DATA=`cat "$TMP_FILE" | grep "Distance between"  | grep -o ".*," | tr -d "," `
 
 				if [ $SHORT_FORMAT_ENABLED = yes ]
 					then
