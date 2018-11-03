@@ -3,13 +3,6 @@
 cd $(dirname $0)
 . load_config_file.bash
 
-if [ "$#" -lt 1 ]
-then
-echo "$0: Mandatory argument ommited."
-echo "Try '$0 --help' for more information."
-exit 1
-fi
-
 POSITIONAL=()
 	while [[ $# -gt 0 ]]
 	do
@@ -59,7 +52,8 @@ CALLSIGN_QTH=`cat "$CHASERS_QTH_LOCATORS_FILE" | grep "$CALLSIGN" | awk '{print 
 
 if [[ -z $CALLSIGN_QTH ]]
 then
-echo "No callsign $CALLSIGN in database"
+echo "No callsign $CALLSIGN in database."
+# echo "Meybe you want to run create-pair-callsign-locator-from-full-qrz-com-info-page.bash script"
 #echo  "Error when processing QSO from $SUMMIT ($SUMMIT_QTH) with $CALLSIGN ($CALLSIGN_QTH) $D4 $D5 $D6 Notes: $D10"
 fi 
 

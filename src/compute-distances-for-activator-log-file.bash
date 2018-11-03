@@ -78,9 +78,8 @@ cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
 while read SUMMIT D4 D5 D6 CALLSIGN D10;
 do
-SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT" | awk '{print $2}'`
-CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN" | awk '{print $2}'`
-
+SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT " | awk '{print $2}'`
+CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}'`
 
 if [ -z $CHASERS_QTH_LOCATOR ]
 then
