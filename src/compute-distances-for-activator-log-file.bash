@@ -6,7 +6,7 @@
 TMP_FILE=$(mktemp)
 
 # without this timer we overload distance calculating server and doesn't get a response from it
-SLEEP_TIMER=3
+SLEEP_TIMER=0
 
 # show RS report?
 REPORT_SHOW=false
@@ -87,7 +87,7 @@ then
 #	echo "No QTH Locator found for callsign $CALLSIGN"
 	echo -n
 else
-DISTANCE=`./get-distanse-beetween-locators.bash $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8}'`
+DISTANCE=`./get-distanse-beetween-locators.bash -c  $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8}'`
 echo -en "$D4 $D5 $SUMMIT\t $CALLSIGN\t\t $DISTANCE"
 [ "$REPORT_SHOW" = "true" ] && echo " $D10" || echo ""
 	sleep $SLEEP_TIMER
