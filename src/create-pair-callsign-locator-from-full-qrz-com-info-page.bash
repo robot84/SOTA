@@ -31,7 +31,9 @@ POSITIONAL=()
 	-h|--help)
 	echo ""
 	echo "Usage:"
-	echo "${0##*/} > chasers_locators.dat "
+	echo "${0##*/} "
+	echo "Write to file QTH locators for all callsigns obtained by get-callsign-info-page.bash"
+	echo "Write to stdout callsigns for whom we cannot specify QTH locator."
 	echo
 	exit 1
 	;;
@@ -46,21 +48,22 @@ POSITIONAL=()
 
 
 function parse_callsign_files() {
-cd "${DB_DIRECTORY}"
+DIR_BEFORE_CD=$(pwd)
+cd "$(dirname $0)/${DB_DIRECTORY}"
+pwd
 for VAR in *.log
 do
 CALLSIGN=`echo $VAR | awk -F  "." ' {print $1}'`
-echo -n "$CALLSIGN "
+# alternate pattern to use if original fail for some records
+# SQUARE=`html2text $VAR |grep "Grid Square" | grep -o "Grid Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $3}'`
 SQUARE=`html2text $VAR |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}'`
 if [ -z "$SQUARE" ]
 then
-echo "??????"
+echo "$CALLSIGN ??????" 
 else
-echo "$SQUARE"
+echo "$CALLSIGN $SQUARE" >> "${DIR_BEFORE_CD}/$CHASERS_QTH_LOCATORS_FILE"
+# echo File: "${DIR_BEFORE_CD}/$CHASERS_QTH_LOCATORS_FILE"
 fi
-# alternate pattern is commented:
-# maybe if primary will fail for a record, this one can do it
-# html2text $VAR |grep "Grid Square" | grep -o "Grid Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $3}'
 
 done
 cd "$STARTING_DIR"

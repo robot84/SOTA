@@ -1,12 +1,14 @@
 #!/bin/bash
 #
-#
+# Hacked version ;)
+# undocumented option --show-when-hit-from-cache
 #
 QTH_LOCATOR_PATTERN="[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]"
 SHORT_FORMAT_ENABLED=no
 MILES_AS_UNIT=no
 CACHE_ENABLED=no
 VERBOSE_ENABLED=no
+SHOW_HITS_FROM_CACHE_ENABLED=no
 DISTANCES_CACHE_FILE="${HOME}.distance_cache"
 
 function print_debug_msg() {
@@ -56,6 +58,10 @@ function parse_parameters(){
 					print_debug_msg "US miles as unit enabled."
 					shift
 					;;
+				--show-when-hit-from-cache)
+				SHOW_HITS_FROM_CACHE_ENABLED=yes
+				shift
+				;;
 				-c|--cache)
 				CACHE_ENABLED=yes
 					print_debug_msg "Work with cache enabled."
@@ -110,6 +116,7 @@ function init_cache() {
 
 
 function check_cache() {
+hit_from_cache=""
 	if [ $CACHE_ENABLED = "yes" ]
 		then
 			array=($(grep -E "(^$qth1 $qth2 )|(^$qth2 $qth1 )" "$DISTANCES_CACHE_FILE"))
@@ -118,6 +125,7 @@ function check_cache() {
 					print_debug_msg "Distance found in cache. Values are ${array[0]}  ${array[1]}  ${array[2]}  ${array[3]}."
 					distance_km=${array[2]}
 					distance_miles=${array[3]}
+					[ $SHOW_HITS_FROM_CACHE_ENABLED = "yes" ] && hit_from_cache=yes
 					RESULT_DATA="Distance between ${array[0]} & ${array[1]} is ${array[2]} km (${array[3]} miles)"
 
 					return 0
@@ -167,7 +175,7 @@ function print_distance() {
 								fi
 				else
 
-					echo $RESULT_DATA
+					echo $RESULT_DATA ${hit_from_cache:+FROM_CACHE}
 						fi
 
 }
