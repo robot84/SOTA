@@ -6,16 +6,17 @@
 # Example; f_log_msg ../log/error.log "Error: Failure foo."
 #
 function f_log_msg() {
-LOG_FILE_NAME="${1}"
-shift
-[ ! -e ${LOG_FILE_NAME} ] && \
- ( mkdir -p $(dirname ${LOG_FILE_NAME}); touch ${LOG_FILE_NAME}; )
+log_file_name="$1"
+[ ! -e ${log_file_name} ] && \
+ ( mkdir -p $(dirname ${log_file_name}); touch ${log_file_name}; )
 
- LOG_DATE=`LC_ALL=C date "+%b %e %H:%M:%S"`
- LOG_HOST=`hostname -s`
- LOG_PROCESS=$(basename $0)
- LOG_PID=$BASHPID
- LOG_MSG="$@"
- echo "$LOG_DATE $LOG_HOST $LOG_PROCESS[$LOG_PID]: $LOG_MSG" >> "${LOG_FILE_NAME}"
+ log_date=`LC_ALL=C date "+%b %e %H:%M:%S"`
+ log_host=`hostname -s`
+ log_process=$(basename $0)
+ log_pid=$BASHPID
+ shift
+ log_msg="$@"
+echo "In f_log_msg()"
+ echo "$log_date $log_host $log_process[$log_pid]: $log_msg" >> "${log_file_name}"
  }
 

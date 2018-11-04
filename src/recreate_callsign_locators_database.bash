@@ -62,7 +62,7 @@ done
 
 TMP_FILE=$(mktemp)
 cp "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
-f_log_msg "$LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
+f_log_msg "${SCRIPT_DIR}/$LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
 cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
 }
 
@@ -74,6 +74,7 @@ SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
 cd "$SCRIPT_DIR"
 . load_config_file.bash 
+. f_log_msg
 load_config_file
 parse_parameters $@
 parse_callsign_files
