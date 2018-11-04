@@ -1,19 +1,16 @@
 #!/bin/bash
 #
 #
-
-# some temp file
-TMP_FILE=$(mktemp)
-
 # without this timer we overload distance calculating server and doesn't get a response from it
 SLEEP_TIMER=0
-
-# show RS report?
 REPORT_SHOW=false
 
 cd $(dirname $0)
+function load_config_file() {
 . load_config_file.bash
+}
 
+function parse_parameters() {
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
 then
 REPORT_SHOW=true
@@ -33,9 +30,11 @@ echo -e "\t\tAt the bottom of this page click 'Download complete log'"
 echo
 exit 127
 fi
-
+}
 cd $(dirname $0)
 
+function create_tmp_file() {
+TMP_FILE=$(mktemp)
 touch $TMP_FILE
 if [ ! -f $TMP_FILE ]
 then
@@ -48,7 +47,9 @@ then
 echo "$0: Error: Can not write to file $TMP_FILE"
 exit 1
 fi
+}
 
+function open_summits_qth_locations_file() {
 if [ ! -f "$SUMMITS_QTH_LOCATORS_FILE" ]
 then
 echo "$0: Error: Can not open file $SUMMITS_QTH_LOCATORS_FILE Check if file exists"
@@ -60,7 +61,9 @@ then
 echo "$0: Error: Can not open file $SUMMITS_QTH_LOCATORS_FILE for reading"
 exit 2
 fi
+}
 
+function open_chasers_qth_locations_file() {
 if [ ! -f $CHASERS_QTH_LOCATORS_FILE ]
 then
 echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE Check if file exists"
@@ -72,10 +75,10 @@ then
 echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE for reading"
 exit 3
 fi
+}
 
-
+function get_distances() {
 cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
-
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
 while read SUMMIT D4 D5 D6 CALLSIGN D10;
 do
@@ -94,3 +97,12 @@ echo -en "$D4 $D5 $SUMMIT\t $CALLSIGN\t\t $DISTANCE"
 fi
 done <$TMP_FILE
 rm $TMP_FILE
+}
+
+load_config_file
+parse_parameters $@
+create_tmp_file
+open_summits_qth_locations_file
+open_chasers_qth_locations_file
+get_distances
+

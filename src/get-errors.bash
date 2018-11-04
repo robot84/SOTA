@@ -1,8 +1,11 @@
 #!/bin/bash
 
 cd $(dirname $0)
+function load_config_file() {
 . load_config_file.bash
+}
 
+function parse_parameters() {
 POSITIONAL=()
 	while [[ $# -gt 0 ]]
 	do
@@ -35,12 +38,12 @@ POSITIONAL=()
 	esac
 	done
 	set -- "${POSITIONAL[@]}" # restore positional parameters
+}
 
 
 
 
-
-
+function parse_qsos() {
 		 TMP_FILE=$(mktemp)
 cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 
@@ -64,3 +67,11 @@ fi
 
 done <$TMP_FILE
 rm $TMP_FILE
+}
+
+
+
+load_config_file
+parse_parameters $@
+parse_qsos
+

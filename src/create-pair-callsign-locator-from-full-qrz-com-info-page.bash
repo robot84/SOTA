@@ -15,8 +15,12 @@
 
 STARTING_DIR=`pwd`
 cd $(dirname $0)
-. load_config_file.bash
 
+function load_config_file() {
+. load_config_file.bash
+}
+
+function parse_parameters() {
 
 POSITIONAL=()
 	while [[ $# -gt 0 ]]
@@ -38,8 +42,10 @@ POSITIONAL=()
 	;;
 	esac
 	done
+}
 
 
+function parse_callsign_files() {
 cd "${DB_DIRECTORY}"
 for VAR in *.log
 do
@@ -58,3 +64,9 @@ fi
 
 done
 cd "$STARTING_DIR"
+}
+
+
+load_config_file
+parse_parameters $@
+parse_callsign_files

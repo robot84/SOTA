@@ -2,13 +2,8 @@
 #
 # (c) SO9ARC Robert Zabkiewicz 2018
 #
-# VER=0.1.2
 #$SLEEP_TIME - getting better performance against 500 Too Many Requests server's response. In seconds.
 #
-# Revision History:
-# 0.1.2 we don't accept stroked callsigns like W7ABC/x, etc
-# 0.1.3 different exit codes for different errors
-# 0.1.4 use config.cfg for loading information about database localization
 
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
@@ -17,7 +12,6 @@ ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED=3
 ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING=5
 ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
 
-### Functions ###
 
 # f_log_msg() - Logging a message to log file
 #
@@ -26,7 +20,7 @@ ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
 #
 # Example; f_log_msg ../log/error.log "Error: Failure foo."
 #
-f_log_msg() {
+function f_log_msg() {
 LOG_FILE_NAME="${1}"
 shift
 [ ! -e ${LOG_FILE_NAME} ] && \
@@ -40,12 +34,12 @@ LOG_MSG="$@"
 echo "$LOG_DATE $LOG_HOST $LOG_PROCESS[$LOG_PID]: $LOG_MSG" >> "${LOG_FILE_NAME}"
 }
 
-### End of Functions ###
-
-### Main ###
 cd $(dirname $0)
+function load_config_file() {
 . load_config_file.bash
+}
 
+function open_cookie_file() {
 if [ ! -r ${COOKIE_FILENAME} ]
 then
 echo $COOKIE_FILENAME
@@ -56,7 +50,9 @@ and you have permissions for reading it."
 	f_log_msg $LOG_FILE "Error: no cookie file available. Cannot login to http://qrz.com/"
 exit $ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING
 fi
+}
 
+function parse_parameters() {
 if [ "$#" -lt 1 ]
 then
 echo "$0: Mandatory argument ommited."
@@ -91,21 +87,27 @@ exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
 	done
 	set -- "${POSITIONAL[@]}" # restore positional parameters
 
-
 CALLSIGN="$1"
+}
 
+function validate_callsign() {
 if [[ "$CALLSIGN" =~ [A-Za-z0-9]*/[A-Za-z0-9][A-Za-z0-9]* ]]
 then
 echo "Unacceptable (stroked) callsign $CALLSIGN. Exiting..."
 exit $ERROR__CALLSIGN_DOESNT_MATCH_PATTERN
 fi
+}
  
 
+function check_if_db_directory_exist() {
 if [ ! -d "$DB_DIRECTORY" ]
 then
 	mkdir "$DB_DIRECTORY"
 fi
+} 
 
+
+function obtain_info_about_callsign() {
 if [ -e "${DB_DIRECTORY}/${CALLSIGN}.log" ]
 then
 	echo "Information about callsing $CALLSIGN already obtained. Nothing to do."
@@ -137,6 +139,13 @@ fi
 sleep $SLEEP_TIME
 
 fi
-
 cd - >> /dev/null
 exit 0
+}
+
+load_config_file
+open_cookie_file
+parse_parameters $@
+validate_callsign
+check_if_db_directory_exist
+obtain_info_about_callsign

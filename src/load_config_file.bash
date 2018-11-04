@@ -2,6 +2,7 @@
 CONFIG_FILE="../resources/config.cfg"
 ERROR__CANNOT_LOAD_CONFIG_FILE=100
 
+main() {
 cd $(dirname $0)
 if [ -r ${CONFIG_FILE} ]
 then
@@ -15,3 +16,6 @@ exit $ERROR__CANNOT_LOAD_CONFIG_FILE
 fi
 
 cd - > /dev/null
+}
+
+main $@

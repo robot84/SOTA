@@ -4,16 +4,17 @@
 SP_CHASERS_FILE=""
 
 cd $(dirname $0)
+function load_config_file() {
 . load_config_file.bash
+}
 
+function parse_parameters() {
 if [ "$#" -lt 1 ]
 then
 echo "${0##*/}: Mandatory argument ommited."
 echo "Try '${0##*/} --help' for more information."
 exit 1
 fi
-
-
 
 POSITIONAL=()
 while [[ $# -gt 0 ]]
@@ -56,12 +57,11 @@ case $key in
 esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
+}
 
 
 
-trap ctrl_c INT
-
-function ctrl_c() {
+function trap_ctrl_c() {
 echo "** Trapped CTRL-C"
 if [ -e "${DB_DIRECTORY}/$CALLSIGN.log" ]
 then
@@ -71,6 +71,7 @@ exit
 }
 
 
+function main_loop() {
 if [ -e  "$SP_CHASERS_FILE" ]
 then
 	while read CALLSIGN; do
@@ -81,3 +82,11 @@ else
 	echo "Create it with one callsign per line.";
 	exit 1
 fi
+}
+
+
+
+load_config_file
+parse_parameters $@
+trap trap_ctrl_c INT
+main_loop
