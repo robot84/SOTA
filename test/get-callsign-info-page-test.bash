@@ -1,7 +1,6 @@
 #!/bin/bash
 
 t001_script_runned_without_arguments_return_1() {
-
 ../src/get-callsign-info-page.bash > /dev/null 2> /dev/null \
 && echo Failed || echo Passed
 rm  -f ${DB_DIRECTORY}/SQ9IAW.log
