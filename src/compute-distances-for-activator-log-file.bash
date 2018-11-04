@@ -5,10 +5,6 @@
 SLEEP_TIMER=0
 REPORT_SHOW=false
 
-cd $(dirname $0)
-function load_config_file() {
-. load_config_file.bash
-}
 
 function parse_parameters() {
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
@@ -31,7 +27,7 @@ echo
 exit 127
 fi
 }
-cd $(dirname $0)
+
 
 function create_tmp_file() {
 TMP_FILE=$(mktemp)
@@ -80,7 +76,7 @@ fi
 function get_distances() {
 cat - | awk -F, ' {print $3,$4,$5,$6,$8,$10}' > $TMP_FILE
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
-while read SUMMIT D4 D5 D6 CALLSIGN D10;
+while read SUMMIT D4 D5 D6 CALLSIGN D10 D12;
 do
 SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT " | awk '{print $2}'`
 CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}'`
@@ -90,7 +86,9 @@ then
 #	echo "No QTH Locator found for callsign $CALLSIGN"
 	echo -n
 else
-DISTANCE=`./get-distanse-beetween-locators.bash -c  $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8}'`
+DISTANCE=`./get-distanse-beetween-locators.bash -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8,$11}'`
+
+echo ${SUMMIT_QTH_LOCATOR:+SUMMIT_$SUMMIT} ${CHASERS_QTH_LOCATOR:+EMPTY_CALLSIGN}  $(./get-distanse-beetween-locators.bash -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR) >> ../log/debug.log
 echo -en "$D4 $D5 $SUMMIT\t $CALLSIGN\t\t $DISTANCE"
 [ "$REPORT_SHOW" = "true" ] && echo " $D10" || echo ""
 	sleep $SLEEP_TIMER
@@ -99,6 +97,12 @@ done <$TMP_FILE
 rm $TMP_FILE
 }
 
+
+
+SCRIPT_DIR="$(dirname $(readlink -e $0))"
+BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
+cd $(dirname $0)
+. load_config_file.bash
 load_config_file
 parse_parameters $@
 create_tmp_file

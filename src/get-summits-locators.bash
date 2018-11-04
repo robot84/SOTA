@@ -3,10 +3,6 @@
 #
 #
 #
-cd $(dirname $0)
-function load_config_file() {
-. load_config_file.bash
-}
 
 function parse_parameters() {
 if [ "$#" -ne 1 ]
@@ -40,6 +36,8 @@ sed 's/ /_/g' ${1} | awk '{print $1, $7}' | grep -P '\w+/\w+-\d+ \w\w\d\d\w\w' >
 }
 
 
+cd $(dirname $0)
+. load_config_file.bash
 load_config_file
 parse_parameters $@
 open_summits_qth_locators_file_for_writing
