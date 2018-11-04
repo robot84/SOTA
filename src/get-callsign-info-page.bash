@@ -13,32 +13,6 @@ ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING=5
 ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
 
 
-# f_log_msg() - Logging a message to log file
-#
-# Arguments: log_filename message_to_log
-# Return: nothing
-#
-# Example; f_log_msg ../log/error.log "Error: Failure foo."
-#
-function f_log_msg() {
-LOG_FILE_NAME="${1}"
-shift
-[ ! -e ${LOG_FILE_NAME} ] && \
- ( mkdir -p $(dirname ${LOG_FILE_NAME}); touch ${LOG_FILE_NAME}; )
-
-LOG_DATE=`LC_ALL=C date "+%b %e %H:%M:%S"`
-LOG_HOST=`hostname -s`
-LOG_PROCESS=$(basename $0)
-LOG_PID=$BASHPID
-LOG_MSG="$@"
-echo "$LOG_DATE $LOG_HOST $LOG_PROCESS[$LOG_PID]: $LOG_MSG" >> "${LOG_FILE_NAME}"
-}
-
-cd $(dirname $0)
-function load_config_file() {
-. load_config_file.bash
-}
-
 function open_cookie_file() {
 if [ ! -r ${COOKIE_FILENAME} ]
 then
@@ -47,7 +21,7 @@ echo "Error: Cannot open cookie file for read."
 echo "Check if cookie file ${COOKIE_FILENAME} exists 
 and you have permissions for reading it."
 
-	f_log_msg $LOG_FILE "Error: no cookie file available. Cannot login to http://qrz.com/"
+	f_log_msg "$LOG_FILE" "Error: no cookie file available. Cannot login to http://qrz.com/"
 exit $ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING
 fi
 }
@@ -57,7 +31,7 @@ if [ "$#" -lt 1 ]
 then
 echo "$0: Mandatory argument ommited."
 echo "Try '$0 --help' for more information."
-	 f_log_msg $LOG_FILE ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
+	 f_log_msg "$LOG_FILE" ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
 exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
 fi
 
@@ -102,7 +76,7 @@ fi
 function check_if_db_directory_exist() {
 if [ ! -d "$DB_DIRECTORY" ]
 then
-	mkdir "$DB_DIRECTORY"
+	mkdir -p "$DB_DIRECTORY"
 fi
 } 
 
@@ -129,23 +103,38 @@ html2text > "${DB_DIRECTORY}/${CALLSIGN}.log" || \
 grep -q Logout "${DB_DIRECTORY}/${CALLSIGN}.log"
 if [ $? -ne 0 ]
 then
-	f_log_msg $LOG_FILE "Error: expired or invalid cookie file. Cannot login to http://qrz.com/"
+	f_log_msg "$LOG_FILE" "Error: expired or invalid cookie file. Cannot login to http://qrz.com/"
 	echo "Error: expired or invalid cookie file. 
 	Cannot login to http://qrz.com/"
 	rm "${DB_DIRECTORY}/${CALLSIGN}.log"
 	exit $ERROR__INVALID_OR_EXPIRED_COOKIE_FILE
 fi
-
-sleep $SLEEP_TIME
-
 fi
-cd - >> /dev/null
-exit 0
 }
 
+
+function append_callsign_and_locator_to_file() {
+SQUARE=`html2text $CALLSIGN |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}'`
+if [ -z "$SQUARE" ]
+then
+echo "$CALLSIGN ??????"
+else
+echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
+fi
+}
+
+
+SCRIPT_DIR="$(dirname $(readlink -e $0))"
+BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
+cd $(dirname $0)
+. f_log_msg
+. load_config_file.bash
 load_config_file
 open_cookie_file
 parse_parameters $@
 validate_callsign
 check_if_db_directory_exist
 obtain_info_about_callsign
+append_callsign_and_locator_to_file
+sleep $SLEEP_TIME
+exit 0

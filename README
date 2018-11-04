@@ -89,9 +89,12 @@ b) repeat for each chaser you know ;) or put all callsigns for which you need to
 
 	./get-multiplecallsigns-info-page.bash -f file_with_callsigns_one_per_line
 
-c) When all chasers are added to database, generate a table containing mappings chaser_callsign vs his_qth_locator:
+	to generate file with chasers callsign you can use this linux command:
+	   cat my-all-qsos.csv | cut -d"," -f8 | sort | uniq | grep -v "/"  > All-chasers-calls.txt
+	where:
+		my-all-qsos.csv - file with your all QSOs downloaded from 
+		http://sotadata.org.uk->View Results->My Results->My Activator Log->Download Complete Log (at the bottom of pagE
 
-	./create-pair-callsign-locator-from-full-qrz-com-info-page.bash > chasers_locators.dat
 d) That is all.
 
 
@@ -102,7 +105,7 @@ c) paste chaser's callsign and his QTH locator, one chaser per line.
 	Chaser's callsign should be first, at the beggining of the line,
 	and after it, separated by a space charakter, paste QTH locator.
 	QTH Locator must have 6 charakters. Not more, not less.
-	Example line of manually_paired.txt file:
+	Example line of resources/chasers_locators.dat file:
 	SQ9RNT JO90id
 
 d) Save changes and close the file.
@@ -125,3 +128,40 @@ cat my-downloaded-activator.log | ./compute-distances-for-activator-log-file.bas
 Wait for results :)
 It can take some time.
 
+
+
+=========================================
+4. If you are a chaser, not an activator.
+=========================================
+
+* In point 1.
+
+Everything exacly the same, but you need of course a list of summits you chased. 
+If you used this application before as an activator, you must know,
+that all summits entered before into this application 
+are valid for chasing too.
+Honeslty speaking, there is no difference between a summit entered for activation or for chasing.
+Both "flavours" are entered to database in case of having for they mapping 
+summit reference number <-> summit locator
+The same is for callsigns. No matter if you entered them as activator's or chaser's callsign.
+If callsign is entered to the dababase with a locator corresponding to it, it can be used 
+in future to measure distance for it as a chasers or activators distance.
+
+* In point 2.
+
+Everything exacly the same, but you need of course a list of callsigns you chased. 
+If you used this application before as an activator, you must know,
+that all callsigns entered before into this application 
+(by get-callsign-info-page.bash or get-multiplecallsigns-info-page.bash scripts)
+are valid for chasing too.
+
+
+* In point 3.
+
+Instead of
+
+cat my-downloaded-activator.log | ./compute-distances-for-activator-log-file.bash  | tee  output-file-for-my-distances.txt
+
+run this script
+
+cat my-downloaded-chaser.log | ./compute-distances-for-chaser-log-file.bash | tee output-file-for-my-distances.txt

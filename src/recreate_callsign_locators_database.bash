@@ -5,20 +5,10 @@
 #
 # Example of output:
 # 3Z9AM JO90xa
-# HF50BRP ??????
 # HF9D JO90ki
 # OK2BTC JN99jo
 #
-# ?????? means that there is no locator info in database
-# try to obtain it manually from other source (your friends, internet)
-#
 
-STARTING_DIR=`pwd`
-cd $(dirname $0)
-
-function load_config_file() {
-. load_config_file.bash
-}
 
 function parse_parameters() {
 
@@ -34,7 +24,14 @@ POSITIONAL=()
 	echo "${0##*/} "
 	echo "Write to file QTH locators for all callsigns obtained by get-callsign-info-page.bash"
 	echo "Write to stdout callsigns for whom we cannot specify QTH locator."
+	echo 
+	echo "Use this script if wants to recreate callsign_locators database (.dat file)"
+	echo "It works off-line in contrast to get-callsign-info-page.bash,"
+	echo "which works completly  on-line."
 	echo
+	echo "If you see on output something like that:"
+	echo -e "SP9ABC ??????\t it means that user not provided to qrz.com his QTH Locator."
+	echo "\t\t\tin this case you must obtain it from other sources."
 	exit 1
 	;;
 	*)
@@ -48,9 +45,7 @@ POSITIONAL=()
 
 
 function parse_callsign_files() {
-DIR_BEFORE_CD=$(pwd)
-cd "$(dirname $0)/${DB_DIRECTORY}"
-pwd
+cd "${DB_DIRECTORY}"
 for VAR in *.log
 do
 CALLSIGN=`echo $VAR | awk -F  "." ' {print $1}'`
@@ -61,15 +56,25 @@ if [ -z "$SQUARE" ]
 then
 echo "$CALLSIGN ??????" 
 else
-echo "$CALLSIGN $SQUARE" >> "${DIR_BEFORE_CD}/$CHASERS_QTH_LOCATORS_FILE"
-# echo File: "${DIR_BEFORE_CD}/$CHASERS_QTH_LOCATORS_FILE"
+echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
 fi
-
 done
-cd "$STARTING_DIR"
+
+TMP_FILE=$(mktemp)
+cp "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
+f_log_msg "$LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
+cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
 }
 
 
+
+############################################## PROGRAM ENTRY POINT #############################
+
+SCRIPT_DIR="$(dirname $(readlink -e $0))"
+BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
+cd "$SCRIPT_DIR"
+. load_config_file.bash 
 load_config_file
 parse_parameters $@
 parse_callsign_files
+exit 0

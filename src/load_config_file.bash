@@ -18,12 +18,13 @@ fi
 
 
 function load_config_file() {
+if_config_file_exists
 .  ${CONFIG_FILE}
 }
 
-
+# temporary obsolete
 function set_working_dir() {
-SCRIPT_DIR=$(dirname $0)
+
 ACTUAL_DIR=$(pwd)
 ORIGINAL_DIR=""
 if [ "$SCRIPT_DIR" != "$ACTUAL_DIR" ]
@@ -34,21 +35,10 @@ fi
 }
 
 
+# temporary obsolete
 function restore_original_dir() {
 if [ -n "$ORIGINAL_DIR" ]
 then
 cd "$ACTUAL_DIR" > /dev/null
 fi
 }
-
-
-function main() {
-
-set_working_dir
-if_config_file_exists
-load_config_file
-restore_original_dir
-}
-
-main $@
-
