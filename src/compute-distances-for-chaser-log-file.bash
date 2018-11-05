@@ -5,10 +5,6 @@
 SLEEP_TIMER=0
 REPORT_SHOW=false
 
-cd $(dirname $0)
-function load_config_file() {
-. load_config_file.bash
-}
 
 function parse_parameters() {
 if [ "$#" = 1 ] && [ "$1" = "-r" ]
@@ -31,7 +27,6 @@ echo
 exit 127
 fi
 }
-cd $(dirname $0)
 
 function create_tmp_file() {
 TMP_FILE=$(mktemp)
@@ -78,16 +73,16 @@ fi
 }
 
 function get_distances() {
-cat - | awk  ' {print $8,$3,$4,$5,$7}' > $TMP_FILE
+cat - | awk -F,  ' {print $9,$4,$5,$2}' > $TMP_FILE
 echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
-while read SUMMIT D4 D5 D6 CALLSIGN D10;
+while read SUMMIT D4 D5 CALLSIGN D10;
 do
 SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT " | awk '{print $2}'`
 CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}'`
-
-if [ -z $CHASERS_QTH_LOCATOR ]
+if [ -z "$CHASERS_QTH_LOCATOR" -o -z "$SUMMIT_QTH_LOCATOR" ]
 then
-#	echo "No QTH Locator found for callsign $CALLSIGN"
+f_log_msg "$LOG_FILE" "Warning: summit locator ($SUMMIT_QTH_LOCATOR) or callsign locator ($CHASERS_QTH_LOCATOR) \
+	is empty or not set."
 	echo -n
 else
 DISTANCE=`./get-distanse-beetween-locators.bash -c --show-when-hit-from-cache  $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8,$11}'`
@@ -99,6 +94,10 @@ done <$TMP_FILE
 rm $TMP_FILE
 }
 
+
+cd $(dirname $0)
+. load_config_file.bash
+. f_log_msg
 load_config_file
 parse_parameters $@
 create_tmp_file

@@ -16,7 +16,6 @@ log_file_name="$1"
  log_pid=$BASHPID
  shift
  log_msg="$@"
-echo "In f_log_msg()"
  echo "$log_date $log_host $log_process[$log_pid]: $log_msg" >> "${log_file_name}"
  }
 
