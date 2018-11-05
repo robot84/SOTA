@@ -1,7 +1,5 @@
 #!/bin/bash
 #
-# writes to stdout pairs: chaser_callsign his_qth_locator
-# one pair by line
 #
 # Example of output:
 # 3Z9AM JO90xa
