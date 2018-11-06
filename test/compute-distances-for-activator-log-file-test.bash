@@ -10,13 +10,13 @@ cd $(dirname $0)
 
 TEST_NAME="wc1"
 cat files/activator-log.csv | ../src/compute-distances-for-activator-log-file.bash > /tmp/asdfad.tmp~
-if  cmp --silent /tmp/asdfad.tmp~ files/test_result 
+if  cmp --silent /tmp/asdfad.tmp~ files/test_result
 then
-echo Test \'$TEST_NAME\' PASSED
-(( PASSED_COUNT = PASSED_COUNT + 1 ))
+  echo Test \'$TEST_NAME\' PASSED
+  (( PASSED_COUNT = PASSED_COUNT + 1 ))
 else
-echo Test \'$TEST_NAME\' FAILED
-(( FAILED_COUNT = FAILED_COUNT + 1 ))
+  echo Test \'$TEST_NAME\' FAILED
+  (( FAILED_COUNT = FAILED_COUNT + 1 ))
 fi
 
 echo Doing clean up...
@@ -31,8 +31,8 @@ echo Failed: $FAILED_COUNT
 
 if [ $FAILED_COUNT -eq 0 ]
 then
-exit 0
+  exit 0
 else
-exit $FAILED_COUNT
+  exit $FAILED_COUNT
 fi
 
