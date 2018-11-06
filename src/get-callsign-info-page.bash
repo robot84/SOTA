@@ -99,6 +99,7 @@ curl \
 "https://www.qrz.com/lookup"  | \
 html2text > "${DB_DIRECTORY}/${CALLSIGN}.log" || \
 { echo "ERROR: Cannot fetch callsign's information."; exit $ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED; };
+sleep $SLEEP_TIME
 grep -q Logout "${DB_DIRECTORY}/${CALLSIGN}.log"
 if [ $? -ne 0 ]
 then
@@ -135,5 +136,4 @@ validate_callsign
 check_if_db_directory_exist
 obtain_info_about_callsign
 append_callsign_and_locator_to_file
-sleep $SLEEP_TIME
 exit 0
