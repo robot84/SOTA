@@ -99,7 +99,6 @@ curl \
 "https://www.qrz.com/lookup"  | \
 html2text > "${DB_DIRECTORY}/${CALLSIGN}.log" || \
 { echo "ERROR: Cannot fetch callsign's information."; exit $ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED; };
-
 grep -q Logout "${DB_DIRECTORY}/${CALLSIGN}.log"
 if [ $? -ne 0 ]
 then
@@ -114,12 +113,12 @@ fi
 
 
 function append_callsign_and_locator_to_file() {
-SQUARE=`html2text $CALLSIGN |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}'`
-if [ -z "$SQUARE" ]
+SQUARE=$(html2text "${DB_DIRECTORY}/${CALLSIGN}.log" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
+if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
 then
-echo "$CALLSIGN ??????"
-else
 echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
+else
+echo "$CALLSIGN ??????"
 fi
 }
 

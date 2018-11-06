@@ -1,10 +1,5 @@
 #!/bin/bash
 
-cd $(dirname $0)
-function load_config_file() {
-. load_config_file.bash
-}
-
 function parse_parameters() {
 POSITIONAL=()
 	while [[ $# -gt 0 ]]
@@ -70,7 +65,8 @@ rm $TMP_FILE
 }
 
 
-
+cd $(dirname $0)
+. load_config_file.bash
 load_config_file
 parse_parameters $@
 parse_qsos
