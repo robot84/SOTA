@@ -5,12 +5,14 @@
 #$SLEEP_TIME - getting better performance against 500 Too Many Requests server's response. In seconds.
 #
 
+APP_VER=0.3
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
 ERROR__CALLSIGN_DOESNT_MATCH_PATTERN=2
 ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED=3
 ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING=5
 ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
+SP_CHASERS_FILE=""
 
 
 function open_cookie_file() {
@@ -44,9 +46,25 @@ function parse_parameters() {
       -h|--help)
         echo ""
         echo "Usage:"
-        echo "${0##*/} <callsign>"
+        echo "${0##*/} [-f filename] [callsign]"
+        echo "Searching QTH Locators for callsigns."
         echo
+		echo "You can pass one callsign as a parameter or list of callsigns in file with -f option."
+        echo -e " -f,--filename\tfile with callsign list, one callsign per line"
         exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
+      ;;
+      -f|--callsigns-list)
+        SP_CHASERS_FILE="$2"
+        shift
+        shift
+      ;;
+      --version)
+	  echo "${0##*/} $APP_VER"
+        echo "Copyright (C) 2018 SO9ARC"
+        echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
+        echo "This is free software: you are free to change and redistribute it. "
+        echo "There is NO WARRANTY, to the extent permitted by law."
+        exit
       ;;
       -*)
         echo "$0: invalid option -- '$1'"
@@ -61,10 +79,23 @@ function parse_parameters() {
   done
   set -- "${POSITIONAL[@]}" # restore positional parameters
   
-  CALLSIGN="$1"
+[ -z "$SP_CHASERS_FILE" ] && CALLSIGN="${POSITIONAL[0]}" || CALLSIGN=""
+  echo POSITIONAL: $CALLSIGN
 }
 
+
+function trap_ctrl_c() {
+  echo "** Trapped CTRL-C"
+  if [ -e "${DB_DIRECTORY}/$CALLSIGN.log" ]
+  then
+    rm "${DB_DIRECTORY}/$CALLSIGN.log"
+  fi
+  exit
+}
+
+
 function validate_callsign() {
+local CALLSIGN="$1"
   if [[ "$CALLSIGN" =~ [A-Za-z0-9]*/[A-Za-z0-9][A-Za-z0-9]* ]]
   then
     echo "Unacceptable (stroked) callsign $CALLSIGN. Exiting..."
@@ -82,6 +113,7 @@ function check_if_db_directory_exist() {
 
 
 function obtain_info_about_callsign() {
+local CALLSIGN="$1"
   if [ -e "${DB_DIRECTORY}/${CALLSIGN}.log" ]
   then
     echo "Information about callsing $CALLSIGN already obtained. Nothing to do."
@@ -114,6 +146,7 @@ function obtain_info_about_callsign() {
 
 
 function append_callsign_and_locator_to_file() {
+local CALLSIGN="$1"
   SQUARE=$(html2text "${DB_DIRECTORY}/${CALLSIGN}.log" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
   if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
   then
@@ -124,6 +157,33 @@ function append_callsign_and_locator_to_file() {
   fi
 }
 
+function main_loop() {
+local CALLSIGN="$1"
+
+if [ -z $CALLSIGN ]
+then
+
+  if [ -e  "$SP_CHASERS_FILE" ]
+  then
+    while read CALLSIGN; do
+validate_callsign $CALLSIGN
+obtain_info_about_callsign $CALLSIGN
+append_callsign_and_locator_to_file $CALLSIGN
+    done < "$SP_CHASERS_FILE"
+  else
+    echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
+    echo "Create it with one callsign per line.";
+    exit 1
+  fi
+
+else
+validate_callsign $CALLSIGN
+obtain_info_about_callsign $CALLSIGN
+append_callsign_and_locator_to_file $CALLSIGN
+fi
+}
+
+
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
@@ -133,8 +193,7 @@ cd $(dirname $0)
 load_config_file
 open_cookie_file
 parse_parameters $@
-validate_callsign
+trap trap_ctrl_c INT
 check_if_db_directory_exist
-obtain_info_about_callsign
-append_callsign_and_locator_to_file
+main_loop $CALLSIGN
 exit 0
