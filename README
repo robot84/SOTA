@@ -4,20 +4,19 @@ SO9ARC (C) 2018
 
 Description of all the scripts in suite
 ------------------------------
-get-distanse-beetween-locators.bash - do the same as above, but using curl.
+get-distanse-beetween-locators.bash - Computes distance between two QTH Locators (in km and miles)
+It uses cloud computing, so you need to have internet connection on.
 
-get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member)
-Usage: ./get-callsign-info-page.bash <callsign>
+Uwage:
+./get-distanse-beetween-locators.bash JO90XA JO90xb
+
+
+get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member) for callsign passed as argument or file with callsigns.
+First import cookie for qrz.com. In resources/config.cfg you can find a path where cookie file should be imported.
+
+Usage: ./get-callsign-info-page.bash [-f filename] [callsign]
 Example: ./get-callsign-info-page.bash SO9ARC
-
-get-multiplecallsigns-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database. Use get-callsign-info-page.bash script to get multiple callsigns info. Prepare list of callsigns in text file SP-chasers_calls.txt, one by line. You can also use other file with option -f <filename>
-No output is generated when working. 
-
-create-pair-callsign-locator-from-full-qrz-com-info-page.bash 
-	Prints to stdout pair callsign-locator, one pair in line
-	for each callsign in database (obtained via get-callsign-info-page.bash, get-multiplecallsigns-info-page.bash or similar script)
-If no locator found on qrz.com for callsign, locator in output is set to ??????
-
+Example: ./get-callsign-info-page.bash -f my_chasers.txt
 
 
 
@@ -85,9 +84,9 @@ a) Run script to download information about chaser's QTH locator:
 
 	./get-callsign-info-page.bash <Chaser_callsign>
 
-b) repeat for each chaser you know ;) or put all callsigns for which you need to obtain a QTH locator in file and run this script against this file:
+b) repeat for each chaser you know ;) or put all callsigns for which you need to obtain a QTH locator in file and run this script against the file:
 
-	./get-multiplecallsigns-info-page.bash -f file_with_callsigns_one_per_line
+	./get-callsign-info-page.bash -f file_with_callsigns_one_per_line
 
 	to generate file with chasers callsign you can use this linux command:
 	   cat my-all-qsos.csv | cut -d"," -f8 | sort | uniq | grep -v "/"  > All-chasers-calls.txt
@@ -152,7 +151,7 @@ in future to measure distance for it as a chasers or activators distance.
 Everything exacly the same, but you need of course a list of callsigns you chased. 
 If you used this application before as an activator, you must know,
 that all callsigns entered before into this application 
-(by get-callsign-info-page.bash or get-multiplecallsigns-info-page.bash scripts)
+(by get-callsign-info-page.bash)
 are valid for chasing too.
 
 
