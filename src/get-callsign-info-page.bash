@@ -25,7 +25,7 @@ function open_cookie_file() {
     echo "Check if cookie file ${COOKIE_FILENAME} exists
     and you have permissions for reading it."
     
-    f_log_msg "$LOG_FILE" "Error: no cookie file available. Cannot login to http://qrz.com/"
+    f_log_msg "$ERROR_LOG_FILE" "Error: no cookie file available. Cannot login to http://qrz.com/"
     exit $ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING
   fi
 }
@@ -35,7 +35,7 @@ function parse_parameters() {
   then
     echo "$0: Mandatory argument ommited."
     echo "Try '$0 --help' for more information."
-    f_log_msg "$LOG_FILE" ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
+    f_log_msg "$ERROR_LOG_FILE" ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
     exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
   fi
   
@@ -121,8 +121,22 @@ function trap_ctrl_c() {
 }
 
 
+function print_locator_not_found_reason() {
+	local log_file="$1"
+	grep -q "Your Search by Callsign found no results" "$log_file"  && \
+	echo "Callsign doesn't exist in http://qrz.com database." && return
+	grep -q "Service limit exceeded: Too many lookups" "$log_file"  && \
+	( 
+	echo "Too many lookups today for http://qrz.com database. Try tommorow."; \
+	rm "$log_file";
+	) && return
+	echo "User didn't provided his QTH Locator on http://qrz.com"
+	return
+}
+
+
 function validate_callsign() {
-local CALLSIGN="$1"
+  local CALLSIGN="$1"
   if [[ "$CALLSIGN" =~ [A-Za-z0-9]*/[A-Za-z0-9][A-Za-z0-9]* ]]
   then
     echo "Unacceptable (stroked) callsign $CALLSIGN. Exiting..."
@@ -140,8 +154,10 @@ function check_if_db_directory_exist() {
 
 
 function obtain_info_about_callsign() {
-local CALLSIGN="$1"
-  if [ -e "${DB_DIRECTORY}/${CALLSIGN}.log" ]
+  local CALLSIGN="$1"
+  local CALLSIGN_LOG_FILE="$2" 
+
+  if [ -e "$CALLSIGN_LOG_FILE" ]
   then
     echo "Information about callsing $CALLSIGN already obtained. Nothing to do."
   else
@@ -156,16 +172,16 @@ local CALLSIGN="$1"
     -e "https://www.qrz.com/lookup" \
     -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36' \
     "https://www.qrz.com/lookup"  | \
-    html2text > "${DB_DIRECTORY}/${CALLSIGN}.log" || \
+    html2text > "$CALLSIGN_LOG_FILE" || \
     { echo "ERROR: Cannot fetch callsign's information."; exit $ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED; };
     sleep $SLEEP_TIME
-    grep -q Logout "${DB_DIRECTORY}/${CALLSIGN}.log"
+    grep -q Logout "$CALLSIGN_LOG_FILE"
     if [ $? -ne 0 ]
     then
-      f_log_msg "$LOG_FILE" "Error: expired or invalid cookie file. Cannot login to http://qrz.com/"
+      f_log_msg "$ERROR_LOG_FILE" "Error: expired or invalid cookie file. Cannot login to http://qrz.com/"
       echo "Error: expired or invalid cookie file.
       Cannot login to http://qrz.com/"
-      rm "${DB_DIRECTORY}/${CALLSIGN}.log"
+      rm "$CALLSIGN_LOG_FILE"
       exit $ERROR__INVALID_OR_EXPIRED_COOKIE_FILE
     fi
   fi
@@ -173,14 +189,19 @@ local CALLSIGN="$1"
 
 
 function append_callsign_and_locator_to_file() {
-local CALLSIGN="$1"
-  SQUARE=$(cat "${DB_DIRECTORY}/${CALLSIGN}.log" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
+  local CALLSIGN="$1"
+  local CALLSIGN_LOG_FILE="$2" 
+  SQUARE=$(cat "$CALLSIGN_LOG_FILE" | \
+	grep "Square" | \
+  	grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | \
+  	awk '{print $2}')
   if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
   then
     grep "^$CALLSIGN ${SQUARE}$" "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" || \
     echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
   else
-    echo "$CALLSIGN ??????"
+    echo -n "$CALLSIGN ??????"
+    print_locator_not_found_reason "$CALLSIGN_LOG_FILE"
   fi
 }
 
@@ -203,8 +224,9 @@ echo "$tmp"
 
 
 function main_loop() {
-local CALLSIGN="$1"
+CALLSIGN_LOG_FILE="${DB_DIRECTORY}/${CALLSIGN}.log" 
 PLAIN_CALLSIGN_FILE=""
+local CALLSIGN="$1"
 
 if [ -z $CALLSIGN ]
 then
@@ -213,9 +235,10 @@ then
   then
     PLAIN_CALLSIGN_FILE=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
     while read CALLSIGN; do
-	validate_callsign $CALLSIGN
-	obtain_info_about_callsign $CALLSIGN
-	append_callsign_and_locator_to_file $CALLSIGN
+		CALLSIGN_LOG_FILE="${DB_DIRECTORY}/${CALLSIGN}.log" 
+		validate_callsign $CALLSIGN
+		obtain_info_about_callsign $CALLSIGN "$CALLSIGN_LOG_FILE"
+		append_callsign_and_locator_to_file $CALLSIGN
     done < "$PLAIN_CALLSIGN_FILE"
     rm "$PLAIN_CALLSIGN_FILE"
   else
@@ -226,7 +249,7 @@ then
 
 else
 	validate_callsign $CALLSIGN
-	obtain_info_about_callsign $CALLSIGN
+	obtain_info_about_callsign $CALLSIGN "$CALLSIGN_LOG_FILE"
 	append_callsign_and_locator_to_file $CALLSIGN
 fi
 }
@@ -238,6 +261,7 @@ cd $(dirname $0)
 . f_log_msg
 . load_config_file.bash
 load_config_file
+ERROR_LOG_FILE="$LOG_FILE"
 open_cookie_file
 parse_parameters $@
 trap trap_ctrl_c INT
