@@ -106,11 +106,18 @@ function parse_parameters() {
 
 function trap_ctrl_c() {
   echo "** Trapped CTRL-C"
+
   if [ -e "${DB_DIRECTORY}/$CALLSIGN.log" ]
   then
     rm "${DB_DIRECTORY}/$CALLSIGN.log"
   fi
-  exit
+
+  if [ -e "$PLAIN_CALLSIGN_FILE" ]
+  then
+    rm "$PLAIN_CALLSIGN_FILE"
+  fi
+
+  exit 1
 }
 
 
@@ -197,20 +204,20 @@ echo "$tmp"
 
 function main_loop() {
 local CALLSIGN="$1"
-local plain_callsign_file=""
+PLAIN_CALLSIGN_FILE=""
 
 if [ -z $CALLSIGN ]
 then
 
   if [ -e  "$SP_CHASERS_FILE" ]
   then
-    plain_callsign_file=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
+    PLAIN_CALLSIGN_FILE=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
     while read CALLSIGN; do
 	validate_callsign $CALLSIGN
 	obtain_info_about_callsign $CALLSIGN
 	append_callsign_and_locator_to_file $CALLSIGN
-    done < "$plain_callsign_file"
-    rm "$plain_callsign_file"
+    done < "$PLAIN_CALLSIGN_FILE"
+    rm "$PLAIN_CALLSIGN_FILE"
   else
     echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
     echo "Create it with one callsign per line.";
