@@ -1,31 +1,107 @@
-ChangeLog
+2018-11-12  robot84  <zabkiewicz.robert@gmail.com>
+
+Added:
+	- Info about the reason of not found locator.
+	- Full path to file in error message (when file doesn't exist)
+	- Possibility to load callsigns directly from sotadata.org.uk
+		.csv activator/chaser log file
+	- Added -c -a switches
 
 
-Major changes:
-- written out first 4 tests.
-- now without cookie script get-callsign-info-page.bash exits
+Changed:
 
-Unofficial changes (work in progress):
-- log errors to log/error.log file. Works for one script for this day.
-- return codes (to OS) now have human readable labels in code
-- added config.cfg file when you can set paths for some files, 
-	without doing this inside code
+	- Updated trap_ctrl_c. Removing temporary files  when Ctrl-C pressed.
+	- Updated --help message
+	- Updated callsign database	with new 85 records
+	- Changed name of -f switch to -p
 
 
-
+Removed:
+	- Deleted unnecessary scripts
 
 
 
-This is in Polish.
-It will be translated soon.
+2018-11-10  Robert  <39273063+robot84@users.noreply.github.com>
 
--napisalem jeden test dla get-callsign-info-page.bash
--daleko posunalem logowanie do pliku dla get-callsign-info-page.bash
--zmiana numerow exit n, na czytelne nazwy dla czlowieka
--obsluga pliku config.cfg, gdyz kilka skryptow potrzebuje tych samych danych
-	pliki z katalogu database/ i trza to jakos shareowac
-	rowniez plik error.log bedzie jeden dla wszystkich skryptow
-- w logowaniu do pliku wyzwaniem bylo utworzenie daty w formacie sysloga, bo mam polskie locale, a nie EN
-- get-callsign-info-page.bash - obsluga sytuacji braku ciasteczka.
-- get-callsign-info-page.bash - zamiana zahardcodowanych w kodzie wartosci na zmienne
--dopisalem kolejne dwa testy dla get-callsign-info-page.bash
+Changed:
+	- Moved functionality of get-multiple-callsign-info-page 
+		into get-callsign-info-page
+
+
+
+2018-11-10  robot84  <zabkiewicz.robert@gmail.com>
+
+Added:
+	- Parsing one callsign or callsign file with multiple calsigns 
+	with one script.
+	- Added --version switch
+	- Add -f filename switch
+
+Removed: 
+	- get-multiples-callsing-info-page.bash
+
+
+2018-11-06  robot84  <zabkiewicz.robert@gmail.com>
+
+Changed:
+	- Fixed issue with adding duplicated to chasers_callsing.dat
+	- Faster 10 times, because using cache for computing distance
+
+
+2018-11-04  robot84  <zabkiewicz.robert@gmail.com>
+
+
+Changed:
+	New way of updating the database. Directly from get-callsign-info-page
+	script.
+	(Not via create-pair-callsign-locator-from-full-qrz-com-info-page.bash)
+
+Removed:
+	- create-pair-callsign-locator-from-full-qrz-com-info-page.bash file
+
+
+
+2018-11-03  robot84  <zabkiewicz.robert@gmail.com>
+
+Added:
+	--miles switch. Combined with --short print distance in US miles
+	--short switch for short output (prints only a distance, as a float number
+	- Added --help
+	- configuration via config file (resources/config.cfg)
+	- README: Added info how to obtain a cookie from qrz.com
+
+Changed:
+	- Deleted information about bearing when presenting distance
+	- Fixed bug when more than one callsign matched grep pattern and locator was get for first one, not for correct one
+	- Fixed: added cookie validation 
+
+
+2018-11-02  robot84  <zabkiewicz.robert@gmail.com>
+
+Changed:
+	- Fixed bug with get-callsign-info-page.bash --help crash
+
+
+2018-11-01  robot84  <zabkiewicz.robert@gmail.com>
+
+	Many changes. See ChangeLog for more.
+
+
+2018-10-30  robot84  <zabkiewicz.robert@gmail.com>
+
+Added:
+	- TODO file created
+	- Possibility to run scripts from any directory in file system. Not only from dir containing scripts
+
+Changed:
+	-  More relevant info about how to run this script suite in README file 
+
+2018-09-21  robot84  <zabkiewicz.robert@gmail.com>
+
+Changed:
+	Updates README
+
+
+2018-09-21  robot84  <zabkiewicz.robert@gmail.com>
+
+	First version
