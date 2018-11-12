@@ -180,15 +180,15 @@ local CALLSIGN="$1"
 function convert_to_callsign_locator_format(){
 local path_to_file="$1"
 local tmp=$(mktemp)
+
 if [ $INPUT_FILE_IS_ACTIVATOR_LOG = "yes" ]
 then
-:
-cat "$path_to_file" |  grep ",FM,"  | cut -d"," -f8 | sort | uniq | grep -v "/"  > $tmp
+	cat "$path_to_file" |  grep ",FM,"  | cut -d"," -f8 | sort | uniq | grep -v "/"  > $tmp
 elif [ $INPUT_FILE_IS_CHASER_LOG = "yes" ]
 then
-cat "$path_to_file" | grep ",FM,"  | cut -d"," -f8 | tr  "/" " " | grep -oE "[[:alnum:]]+[[:digit:]][[:alnum:]]+" | sort | uniq > $tmp
+	cat "$path_to_file" | grep ",FM,"  | cut -d"," -f8 | tr  "/" " " | grep -oE "[[:alnum:]]+[[:digit:]][[:alnum:]]+" | sort | uniq > $tmp
 else
-cat "$path_to_file" | sort | uniq | grep -v "/" > $tmp
+	cat "$path_to_file" | sort | uniq | grep -v "/" > $tmp
 fi
 
 echo "$tmp"
@@ -204,13 +204,13 @@ then
 
   if [ -e  "$SP_CHASERS_FILE" ]
   then
-plain_callsign_file=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
+    plain_callsign_file=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
     while read CALLSIGN; do
-validate_callsign $CALLSIGN
-obtain_info_about_callsign $CALLSIGN
-append_callsign_and_locator_to_file $CALLSIGN
+	validate_callsign $CALLSIGN
+	obtain_info_about_callsign $CALLSIGN
+	append_callsign_and_locator_to_file $CALLSIGN
     done < "$plain_callsign_file"
-rm "$plain_callsign_file"
+    rm "$plain_callsign_file"
   else
     echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
     echo "Create it with one callsign per line.";
@@ -218,12 +218,11 @@ rm "$plain_callsign_file"
   fi
 
 else
-validate_callsign $CALLSIGN
-obtain_info_about_callsign $CALLSIGN
-append_callsign_and_locator_to_file $CALLSIGN
+	validate_callsign $CALLSIGN
+	obtain_info_about_callsign $CALLSIGN
+	append_callsign_and_locator_to_file $CALLSIGN
 fi
 }
-
 
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
