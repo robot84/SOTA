@@ -1,4 +1,6 @@
+0.3.1
 2018-11-12  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Added:
 	- Info about the reason of not found locator.
@@ -21,19 +23,16 @@ Removed:
 
 
 
-2018-11-10  Robert  <39273063+robot84@users.noreply.github.com>
 
-Changed:
-	- Moved functionality of get-multiple-callsign-info-page 
-		into get-callsign-info-page
-
-
-
+0.3.0
 2018-11-10  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Added:
 	- Parsing one callsign or callsign file with multiple calsigns 
 	with one script.
+	- Moved functionality of get-multiple-callsign-info-page 
+	into get-callsign-info-page
 	- Added --version switch
 	- Add -f filename switch
 
@@ -41,14 +40,18 @@ Removed:
 	- get-multiples-callsing-info-page.bash
 
 
+0.2.1
 2018-11-06  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Changed:
 	- Fixed issue with adding duplicated to chasers_callsing.dat
 	- Faster 10 times, because using cache for computing distance
 
 
+0.2.0
 2018-11-04  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 
 Changed:
@@ -61,7 +64,9 @@ Removed:
 
 
 
+0.1.5
 2018-11-03  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Added:
 	--miles switch. Combined with --short print distance in US miles
@@ -76,18 +81,24 @@ Changed:
 	- Fixed: added cookie validation 
 
 
+0.1.4
 2018-11-02  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Changed:
 	- Fixed bug with get-callsign-info-page.bash --help crash
 
 
+0.1.3
 2018-11-01  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 	Many changes. See ChangeLog for more.
 
 
+0.1.2
 2018-10-30  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Added:
 	- TODO file created
@@ -96,12 +107,16 @@ Added:
 Changed:
 	-  More relevant info about how to run this script suite in README file 
 
+0.1.1
 2018-09-21  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 Changed:
 	Updates README
 
 
+0.1.0
 2018-09-21  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
 
 	First version

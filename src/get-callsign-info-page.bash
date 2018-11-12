@@ -5,7 +5,7 @@
 #$SLEEP_TIME - getting better performance against 500 Too Many Requests server's response. In seconds.
 #
 
-APP_VER=0.4
+APP_VER=0.3.1
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
 ERROR__CALLSIGN_DOESNT_MATCH_PATTERN=2
