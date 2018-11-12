@@ -5,7 +5,7 @@
 #$SLEEP_TIME - getting better performance against 500 Too Many Requests server's response. In seconds.
 #
 
-APP_VER=0.3
+APP_VER=0.4
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
 ERROR__CALLSIGN_DOESNT_MATCH_PATTERN=2
@@ -13,6 +13,8 @@ ERROR__COMMUNICATION_WITH_QRZ_COM_SERVER_FAILED=3
 ERROR__CANNOT_OPEN_COOKIE_FILE_FOR_READING=5
 ERROR__INVALID_OR_EXPIRED_COOKIE_FILE=6
 SP_CHASERS_FILE=""
+INPUT_FILE_IS_ACTIVATOR_LOG=no
+INPUT_FILE_IS_CHASER_LOG=no
 
 
 function open_cookie_file() {
@@ -46,19 +48,38 @@ function parse_parameters() {
       -h|--help)
         echo ""
         echo "Usage:"
-        echo "${0##*/} [-f filename] [callsign]"
+        echo "${0##*/} [-a filename] [-c filename] [-p filename] [callsign]"
         echo "Searching QTH Locators for callsigns."
         echo
 		echo "You can pass one callsign as a parameter or list of callsigns in file with -f option."
-        echo -e " -f,--filename\tfile with callsign list, one callsign per line"
+        echo -e "  -p, --plain-log\t\t file with callsign list. In format: One callsign per line."
+		echo -e "\t\t\t\t Only callsigns without strokes (e.g. /M /P /9 OM/ OK/ etc) are accepted."
+		echo -e "  -a, --activator-log\t\t input file is .csv activator log downloaded from sotadata.org.uk"
+		echo -e "  -c, --chaser-log\t\t input file is .csv chaser log downloaded from sotadata.org.uk"
+		echo
+		echo -e "      --help\t\t\t display this help and exit"
+		echo -e "      --version\t\t\t output version information and exit"
         exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
       ;;
-      -f|--callsigns-list)
+      -p|--plain-log)
         SP_CHASERS_FILE="$2"
         shift
         shift
       ;;
-      --version)
+       -a|--activator-log)
+		INPUT_FILE_IS_ACTIVATOR_LOG=yes
+        SP_CHASERS_FILE="$2"
+        shift
+        shift
+      ;;
+       -c|--chaser-log)
+		INPUT_FILE_IS_CHASER_LOG=yes
+        SP_CHASERS_FILE="$2"
+        shift
+        shift
+      ;;
+
+     --version)
 	  echo "${0##*/} $APP_VER"
         echo "Copyright (C) 2018 SO9ARC"
         echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
@@ -80,7 +101,6 @@ function parse_parameters() {
   set -- "${POSITIONAL[@]}" # restore positional parameters
   
 [ -z "$SP_CHASERS_FILE" ] && CALLSIGN="${POSITIONAL[0]}" || CALLSIGN=""
-  echo POSITIONAL: $CALLSIGN
 }
 
 
@@ -157,19 +177,40 @@ local CALLSIGN="$1"
   fi
 }
 
+function convert_to_callsign_locator_format(){
+local path_to_file="$1"
+local tmp=$(mktemp)
+if [ $INPUT_FILE_IS_ACTIVATOR_LOG = "yes" ]
+then
+:
+cat "$path_to_file" |  grep ",FM,"  | cut -d"," -f8 | sort | uniq | grep -v "/"  > $tmp
+elif [ $INPUT_FILE_IS_CHASER_LOG = "yes" ]
+then
+cat "$path_to_file" | grep ",FM,"  | cut -d"," -f8 | tr  "/" " " | grep -oE "[[:alnum:]]+[[:digit:]][[:alnum:]]+" | sort | uniq > $tmp
+else
+cat "$path_to_file" | sort | uniq | grep -v "/" > $tmp
+fi
+
+echo "$tmp"
+}
+
+
 function main_loop() {
 local CALLSIGN="$1"
+local plain_callsign_file=""
 
 if [ -z $CALLSIGN ]
 then
 
   if [ -e  "$SP_CHASERS_FILE" ]
   then
+plain_callsign_file=$(convert_to_callsign_locator_format "$SP_CHASERS_FILE")
     while read CALLSIGN; do
 validate_callsign $CALLSIGN
 obtain_info_about_callsign $CALLSIGN
 append_callsign_and_locator_to_file $CALLSIGN
-    done < "$SP_CHASERS_FILE"
+    done < "$plain_callsign_file"
+rm "$plain_callsign_file"
   else
     echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
     echo "Create it with one callsign per line.";

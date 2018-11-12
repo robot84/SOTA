@@ -14,9 +14,11 @@ Uwage:
 get-callsign-info-page.bash - Gets callsign info (especially QTH Locator) from qrz.com database (Limited to 100 request/24h if you are not a premium member) for callsign passed as argument or file with callsigns.
 First import cookie for qrz.com. In resources/config.cfg you can find a path where cookie file should be imported.
 
-Usage: ./get-callsign-info-page.bash [-f filename] [callsign]
+Usage: ./get-callsign-info-page.bash [-a filename] [-c filename] [-p filename] [callsign]
 Example: ./get-callsign-info-page.bash SO9ARC
-Example: ./get-callsign-info-page.bash -f my_chasers.txt
+Example: ./get-callsign-info-page.bash -p my_chasers_one_per_line.txt
+Example: ./get-callsign-info-page.bash -a SQ9ABC_log_20181104.csv
+Example: ./get-callsign-info-page.bash -c SQ9ABC_chaserlog_20181104.csv
 
 
 
@@ -86,24 +88,35 @@ a) Run script to download information about chaser's QTH locator:
 
 b) repeat for each chaser you know ;) or put all callsigns for which you need to obtain a QTH locator in file and run this script against the file:
 
-	./get-callsign-info-page.bash -f file_with_callsigns_one_per_line
+	./get-callsign-info-page.bash -p file_with_callsigns_one_per_line.txt
 
-	to generate file with chasers callsign you can use this linux command:
-	   cat my-all-qsos.csv | cut -d"," -f8 | sort | uniq | grep -v "/"  > All-chasers-calls.txt
+You can load your chaser/activator log from sotadata.org.uk to get callsigns from it. Just run:
+
+for activator file:
+	./get-callsign-info-page.bash -a SQ9ABC_log_20181104.csv
+
+for chaser file:
+	./get-callsign-info-page.bash -c SQ9ABC_chaserlog_20181104.csv
+
 	where:
-		my-all-qsos.csv - file with your all QSOs downloaded from 
-		http://sotadata.org.uk->View Results->My Results->My Activator Log->Download Complete Log (at the bottom of pagE
+		SQ9ABC_log_20181104.csv - file with QSOs downloaded from 
+		http://sotadata.org.uk->View Results->My Results->My Activator Log->Download Complete Log (at bottom of the page)
+		SQ9ABC_chaserlog_20181104.csv - file with QSOs downloaded from 
+		http://sotadata.org.uk->View Results->My Results->My Chaser Log->Download Complete Log (at top of the page)
+
 
 d) That is all.
 
 
 Manual way:
-a) find qth locator for a chaser 
+a) find qth locator for a chaser somehow
 b) open resources/chasers_locators.dat in your favourite text editor
 c) paste chaser's callsign and his QTH locator, one chaser per line.
 	Chaser's callsign should be first, at the beggining of the line,
-	and after it, separated by a space charakter, paste QTH locator.
-	QTH Locator must have 6 charakters. Not more, not less.
+	and after it, separated by a space character, paste QTH locator.
+	QTH Locator must have 6 characters. Not more, not less.
+	Using stroked callsing (e.g. /M /P /9 OK/ W9/ etc.) 
+	if forbidden.
 	Example line of resources/chasers_locators.dat file:
 	SQ9RNT JO90id
 
@@ -113,11 +126,11 @@ f) Repeat all steps for each chaser your are interested in
 
 
 =========================================
-3. Generate QSO's distances 
+3. Generate QSO distances 
 =========================================
 Log in to http://sotadata.org.uk/
 Navigate to View Results->My Results->My Activator Log
-Go to bottom of the page and click buttom 'Download complete log'
+Go to bottom of the page and click button 'Download complete log'
 Save the file.
 Use this file in below command:
 

@@ -16,3 +16,10 @@ Feature: caching locator pair distance
 
 Show summit names, not only reference number
 
+readlink -m dupa
+/home/robxt/git-repos/SOTA/SO9ARC/dupa
+wprowadzic readlink dla wyswietlania bledu, ze pliku nei znalezniono
+bo inaczej user nie kapnie sie co jest nie tak, w jakiej sciezce program szuka pliku, i go nie znajduje
+
+Unacceptable (stroked) callsign SQ9RHX/P. Exiting...
+zmienic zachowanie skryptu. nie ma wychodzic, tylko pomijac taki znak
