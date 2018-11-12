@@ -174,7 +174,7 @@ local CALLSIGN="$1"
 
 function append_callsign_and_locator_to_file() {
 local CALLSIGN="$1"
-  SQUARE=$(html2text "${DB_DIRECTORY}/${CALLSIGN}.log" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
+  SQUARE=$(cat "${DB_DIRECTORY}/${CALLSIGN}.log" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
   if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
   then
     grep "^$CALLSIGN ${SQUARE}$" "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" || \
