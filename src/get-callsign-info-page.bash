@@ -219,8 +219,8 @@ then
     done < "$PLAIN_CALLSIGN_FILE"
     rm "$PLAIN_CALLSIGN_FILE"
   else
-    echo "File \"${SP_CHASERS_FILE}\" doesn't exist!";
-    echo "Create it with one callsign per line.";
+	chaser_file=$(readlink -m "${SP_CHASERS_FILE}")
+    echo "File \"$chaser_file\" doesn't exist!";
     exit 1
   fi
 
