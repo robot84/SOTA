@@ -200,7 +200,7 @@ function append_callsign_and_locator_to_file() {
     grep "^$CALLSIGN ${SQUARE}$" "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" || \
     echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
   else
-    echo -n "$CALLSIGN ??????"
+    echo -n "$CALLSIGN ?????? "
     print_locator_not_found_reason "$CALLSIGN_LOG_FILE"
   fi
 }
@@ -238,7 +238,7 @@ then
 		CALLSIGN_LOG_FILE="${DB_DIRECTORY}/${CALLSIGN}.log" 
 		validate_callsign $CALLSIGN
 		obtain_info_about_callsign $CALLSIGN "$CALLSIGN_LOG_FILE"
-		append_callsign_and_locator_to_file $CALLSIGN
+		append_callsign_and_locator_to_file $CALLSIGN "$CALLSIGN_LOG_FILE"
     done < "$PLAIN_CALLSIGN_FILE"
     rm "$PLAIN_CALLSIGN_FILE"
   else
@@ -250,7 +250,7 @@ then
 else
 	validate_callsign $CALLSIGN
 	obtain_info_about_callsign $CALLSIGN "$CALLSIGN_LOG_FILE"
-	append_callsign_and_locator_to_file $CALLSIGN
+	append_callsign_and_locator_to_file $CALLSIGN "$CALLSIGN_LOG_FILE"
 fi
 }
 
