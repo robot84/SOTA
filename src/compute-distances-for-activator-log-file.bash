@@ -32,6 +32,7 @@ function parse_parameters() {
 function create_tmp_file() {
   TMP_FILE=$(mktemp)
   touch $TMP_FILE
+#  exit_if_file_not_exist $TMP_FILE
   if [ ! -f $TMP_FILE ]
   then
     echo "$0: Error: Can not create file $TMP_FILE"
