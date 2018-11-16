@@ -1,0 +1,12 @@
+These scripts search for non-existing summit reference numbers, that existed in the past and print them to stdout.
+It can be useful, when you build your summit database, and want to know, for which summit references you must obtain locator manually.
+
+Input file must have a name: summits.num and be in the same directory as script
+Input file must have the format:
+(numbers of existing in database summits in region)
+
+01
+02
+03
+04
+...
