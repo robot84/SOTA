@@ -26,9 +26,21 @@ function parse_parameters() {
         echo "If you see on output something like that:"
         echo -e "SP9ABC ??????\t it means there is no QTH Locator information for this user"
         echo "\t\t\tIn this case you must obtain it from other sources than qrz.com."
+		echo
+		echo "\t\t--version\tprint version info and exit"
         exit 1
       ;;
-      *)
+  --version)
+	  echo "${0##*/} $APP_VER"
+	  echo "Copyright (C) 2018 SO9ARC"
+	  echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
+	  echo "This is free software: you are free to change and redistribute it. "
+	  echo "There is NO WARRANTY, to the extent permitted by law."
+	  echo
+	  echo "Written by Robert Zabkiewicz SO9ARC."
+	  exit
+	  ;;
+  *)
         echo "$0: invalid option -- '$1'"
         echo "Try '$0 --help' for more information."
         exit

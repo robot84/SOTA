@@ -17,14 +17,7 @@ function print_debug_msg() {
 
 
 function parse_parameters(){
-  if [ "$#" -lt 2 ]
-  then
-    echo "$0: too less parameters."
-    echo "Run $0 --help for more info."
-    exit 1
-  fi
-  
-  POSITIONAL=()
+ POSITIONAL=()
   while [[ $# -gt 0 ]]
   do
     key="$1"
@@ -42,6 +35,7 @@ function parse_parameters(){
         echo "for the same query"
         echo -e " -cf|--cache-file\t use cache file for caching queries"
         echo -e " -v|--verbose\t print info about app work"
+        echo -e " --version\t print version info and exit"
         exit 1
       ;;
       -v|--verbose)
@@ -73,6 +67,16 @@ function parse_parameters(){
         shift
         shift
       ;;
+	  --version)
+		  echo "${0##*/} $APP_VER"
+		  echo "Copyright (C) 2018"
+		  echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
+		  echo "This is free software: you are free to change and redistribute it. "
+		  echo "There is NO WARRANTY, to the extent permitted by law."
+		  echo
+		  echo "Written by Robert Zabkiewicz SO9ARC."
+		  exit
+		  ;;
       -*)
         echo "${0##*/}: invalid option -- '$1'"
         echo "Try '$0 --help' for more information."
@@ -84,7 +88,15 @@ function parse_parameters(){
       ;;
     esac
   done
+
+    if [ "$#" -lt 2 ]
+  then
+    echo "$0: too less parameters."
+    echo "Run $0 --help for more info."
+    exit 1
+  fi
   
+ 
   set -- "${POSITIONAL[@]}" # restore positional parameters
   qth1="${POSITIONAL[0]}"
   qth2="${POSITIONAL[1]}"
@@ -180,7 +192,9 @@ function print_distance() {
   
 }
 
-
+cd $(dirname $0)
+. load_config_file.bash
+load_config_file
 parse_parameters $@
 check_if_callsigns_have_valid_format $qth1 $qth2
 init_cache

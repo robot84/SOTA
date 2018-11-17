@@ -5,7 +5,6 @@
 #$SLEEP_TIME - getting better performance against 500 Too Many Requests server's response. In seconds.
 #
 
-APP_VER=0.3.1
 SLEEP_TIME=2
 ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT=1
 ERROR__CALLSIGN_DOESNT_MATCH_PATTERN=2
@@ -85,6 +84,8 @@ function parse_parameters() {
         echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
         echo "This is free software: you are free to change and redistribute it. "
         echo "There is NO WARRANTY, to the extent permitted by law."
+		echo
+		echo "Written by Robert Zabkiewicz SO9ARC."
         exit
       ;;
       -*)
@@ -129,7 +130,7 @@ function print_locator_not_found_reason() {
 	( 
 	echo "Too many lookups today for http://qrz.com database. Try tommorow."; \
 	rm "$log_file";
-	) && return
+	) && exit 1
 	echo "User didn't provided his QTH Locator on http://qrz.com"
 	return
 }
