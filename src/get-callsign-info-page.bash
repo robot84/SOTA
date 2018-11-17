@@ -193,7 +193,7 @@ function append_callsign_and_locator_to_file() {
   local CALLSIGN_LOG_FILE="$2" 
   SQUARE=$(cat "$CALLSIGN_LOG_FILE" | \
 	grep "Square" | \
-  	grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | \
+  	grep -oE "Square[[:space:]]+[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | \
   	awk '{print $2}')
   if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
   then

@@ -1,12 +1,8 @@
 #!/bin/bash
 #
 #
-# Example of output:
-# 3Z9AM JO90xa
-# HF9D JO90ki
-# OK2BTC JN99jo
-#
 
+DEBUG_ENABLED=no
 
 function parse_parameters() {
   
@@ -59,7 +55,7 @@ function parse_callsign_files() {
     CALLSIGN=`echo $log_file | awk -F  "." ' {print $1}'`
     # alternate pattern to use if original fail for some records
     # SQUARE=`cat $log_file |grep "Grid Square" | grep -o "Grid Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $3}'`
-    SQUARE=$(cat "$log_file" |grep "Square" | grep -o "Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
+    SQUARE=$(cat "$log_file" |grep "Square" | grep -oE "Square[[:space:]]+[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
     if [ -z "$SQUARE" ]
     then
       echo  -n "$CALLSIGN ?????? "
