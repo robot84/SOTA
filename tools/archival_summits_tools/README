@@ -1,12 +1,20 @@
 These scripts search for non-existing summit reference numbers, that existed in the past and print them to stdout.
 It can be useful, when you build your summit database, and want to know, for which summit references you must obtain locator manually.
 
-Input file must have a name: summits.num and be in the same directory as script
 Input file must have the format:
-(numbers of existing in database summits in region)
 
-01
-02
-03
-04
+SP/BZ-001
+SP/TA-013
+OK/PO-081
 ...
+
+
+When you find locator for one of these summits, you can merge it to summits_database:
+Warning! Be careful and use ">>" operator insted of ">" which overwrite database, not append to it.
+
+cp ../../resources/summits_database.dat ../../resources/summits_database.dat.bak
+
+cat >> ../../resources/summits_database.dat
+OK/PO-081 JO90ca
+SP/TA-013 JN99ab
+
