@@ -262,7 +262,6 @@ cd $(dirname $0)
 . f_log_msg
 . load_config_file.bash
 load_config_file
-ERROR_LOG_FILE="$LOG_FILE"
 open_cookie_file
 parse_parameters $@
 trap trap_ctrl_c INT

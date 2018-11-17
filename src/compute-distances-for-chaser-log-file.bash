@@ -81,7 +81,7 @@ function get_distances() {
     CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}'`
     if [ -z "$CHASERS_QTH_LOCATOR" -o -z "$SUMMIT_QTH_LOCATOR" ]
     then
-      f_log_msg "$LOG_FILE" "Warning: summit locator ($SUMMIT_QTH_LOCATOR) or callsign locator ($CHASERS_QTH_LOCATOR) \
+      f_log_msg "$ERROR_LOG_FILE" "Warning: summit locator ($SUMMIT_QTH_LOCATOR) or callsign locator ($CHASERS_QTH_LOCATOR) \
       is empty or not set."
       echo -n
     else

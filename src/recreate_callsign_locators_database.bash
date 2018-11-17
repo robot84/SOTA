@@ -79,7 +79,7 @@ function parse_callsign_files() {
   
   TMP_FILE=$(mktemp)
   cp "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
-  f_log_msg "${SCRIPT_DIR}/$LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
+  f_log_msg "${SCRIPT_DIR}/$ERROR_LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
   cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
 #  echo TMP FILE $TMP_FILE
 }
