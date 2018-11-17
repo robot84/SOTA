@@ -1,3 +1,27 @@
+0.3.2
+2018-11-17  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
+
+Added:
+	- All Polish archival summits, which was deleted from SOTA some days.
+	- tools dir with scripts that helps configuration manager
+	of getting his work easier, faster, automated.
+	- --help and --version switches and short description what script do
+	for all scripts
+	- More callsigns with locator in application's database
+	(most of them Polish)
+
+
+Changed:
+	- Added APP_VER variable to config file.
+	- Fixed locator finding algorithm
+
+
+Removed:
+	- Deleted unnecessary scripts
+
+
+
 0.3.1
 2018-11-12  robot84  <zabkiewicz.robert@gmail.com>
 --------------------------------------------------
@@ -20,7 +44,6 @@ Changed:
 
 Removed:
 	- Deleted unnecessary scripts
-
 
 
 
