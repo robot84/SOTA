@@ -1,15 +1,10 @@
 #!/bin/bash
-#
-# Hacked version ;)
-# undocumented option --show-when-hit-from-cache
-#
 QTH_LOCATOR_PATTERN="[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]"
 SHORT_FORMAT_ENABLED=no
 MILES_AS_UNIT=no
 CACHE_ENABLED=no
 VERBOSE_ENABLED=no
 SHOW_HITS_FROM_CACHE_ENABLED=no
-DISTANCES_CACHE_FILE="${HOME}.distance_cache"
 
 function print_debug_msg() {
   [ $VERBOSE_ENABLED = "yes" ] && echo "$1"
@@ -36,6 +31,7 @@ function parse_parameters(){
         echo -e " -cf|--cache-file\t use cache file for caching queries"
         echo -e " -v|--verbose\t print info about app work"
         echo -e " --version\t print version info and exit"
+        echo -e " --show-when-hit-from-cache\t add particular info, if hit comes from cache"
         exit 1
       ;;
       -v|--verbose)
