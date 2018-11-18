@@ -1,3 +1,15 @@
+0.4.0
+2018-11-18  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
+
+Changed:
+	- Config file use absolute paths
+	- You can use more natual way to pass a filename (e.g. activator/chaser log) as a script argument.
+	Don't need to provide path relative to src/ directory. Instead of this you should provide
+	path relative to current working directory, from which you write command to run a script.
+
+
+
 0.3.2
 2018-11-17  robot84  <zabkiewicz.robert@gmail.com>
 --------------------------------------------------
