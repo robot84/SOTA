@@ -45,10 +45,8 @@ function parse_parameters() {
     
     case $key in
       -h|--help)
-        echo ""
-        echo "Usage:"
-        echo "${0##*/} [-a filename] [-c filename] [-p filename] [callsign]"
-        echo "Searching QTH Locators for callsigns."
+        echo "Usage: ${0##*/} [-a filename] [-c filename] [-p filename] [callsign]"
+        echo "Searching QTH Locators for callsigns on the qrz.com web page."
         echo
 		echo "You can pass one callsign as a parameter or list of callsigns in file with -f option."
         echo -e "  -p, --plain-log\t\t file with callsign list. In format: One callsign per line."
@@ -58,7 +56,7 @@ function parse_parameters() {
 		echo
 		echo -e "      --help\t\t\t display this help and exit"
 		echo -e "      --version\t\t\t output version information and exit"
-        exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
+        exit 1
       ;;
       -p|--plain-log)
         SP_CHASERS_FILE="$2"

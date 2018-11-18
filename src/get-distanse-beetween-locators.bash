@@ -7,7 +7,7 @@ VERBOSE_ENABLED=no
 SHOW_HITS_FROM_CACHE_ENABLED=no
 
 function print_debug_msg() {
-  [ $VERBOSE_ENABLED = "yes" ] && echo "$1"
+  [ $VERBOSE_ENABLED = "yes" ] && echo "*** $@"
 }
 
 
@@ -19,19 +19,20 @@ function parse_parameters(){
     
     case $key in
       -h|--help)
-        echo ""
-        echo "Usage:"
-        echo "${0##*/} [-s] [-m] [-c] [-v] [-cf cache_file] <QTHlocator1> <QTHlocator2>"
+        echo "Usage: ${0##*/} [-s] [-m] [-c] [-v] [-cf cache_file] <QTHlocator1> <QTHlocator2>"
+		echo "Compute distance between two Locators. Using cloud to do this."
         echo
         echo -e " -s|--short\t short output format, prints only distance"
-        echo -e " -m|--miles\t use with -m, print in miles insted of km"
+        echo -e " -m|--miles\t use with -s, print in miles insted of km"
         echo -e " -c|--cache-enabled\t Enable responses caching."
         echo -e "\t\tWith cache enabled you don't need to query a server another time "
         echo "for the same query"
         echo -e " -cf|--cache-file\t use cache file for caching queries"
         echo -e " -v|--verbose\t print info about app work"
-        echo -e " --version\t print version info and exit"
+		echo
         echo -e " --show-when-hit-from-cache\t add particular info, if hit comes from cache"
+        echo -e " --version\t print version info and exit"
+        echo -e " --help\t print this help and exit"
         exit 1
       ;;
       -v|--verbose)
@@ -165,10 +166,10 @@ function calculate_distance() {
   print_debug_msg "Calculating distance...Please wait..."
   TMP_FILE=$(mktemp)
   curl -s -X POST --data "mygrid=$1&fagrid=$2" https://www.chris.org/cgi-bin/showdis > "$TMP_FILE"
-  RESULT_DATA=`cat "$TMP_FILE" | grep "Distance between"  | grep -o ".*," | tr -d "," `
+  RESULT_DATA=$(cat "$TMP_FILE" | grep "Distance between"  | grep -o ".*," | tr -d "," )
   rm -f  "$TMP_FILE"
   distance_km=$(echo $RESULT_DATA | awk '{print $7}')
-  distance_miles=$(echo $RESULT_DATA | awk '{print substr($9,2)}')
+  distance_miles=$(echo $RESULT_DATA | sed 's/[()]//g' | awk '{print $9}') 
 }
 
 
@@ -177,9 +178,9 @@ function print_distance() {
   then
     if [ $MILES_AS_UNIT = "yes" ]
     then
-      echo $distance_miles
+      echo $distance_miles ${hit_from_cache:+FROM_CACHE}
     else
-      echo  $distance_km
+      echo  $distance_km ${hit_from_cache:+FROM_CACHE}
     fi
   else
     
