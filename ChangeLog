@@ -1,3 +1,20 @@
+
+0.4.1
+2018-11-18  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
+
+Added:
+	--miles option in compute_QSO_distances.bash. Previously it was hardcoded
+	- Fixed issue with trouble to display when < 10 miles
+
+Changed:
+	- Merged scripts computing QSO distance for activator and for chaser into
+	  one named "compute_QSO_distances.bash"
+	- Getting input from file instead of stdin for script computing QSO distance
+	- Some computing engine options moved to config file (GET_DISTANCE_OPTIONS) insted of being hardcoded.
+
+
+
 0.4.0
 2018-11-18  robot84  <zabkiewicz.robert@gmail.com>
 --------------------------------------------------
@@ -112,7 +129,8 @@ Added:
 
 Changed:
 	- Deleted information about bearing when presenting distance
-	- Fixed bug when more than one callsign matched grep pattern and locator was get for first one, not for correct one
+	- Fixed bug when more than one callsign matched grep pattern and locator
+	  was get for first one, not for correct one
 	- Fixed: added cookie validation 
 
 
