@@ -61,13 +61,13 @@ function open_summits_qth_locations_file() {
 }
 
 function open_chasers_qth_locations_file() {
-  if [ ! -f $CHASERS_QTH_LOCATORS_FILE ]
+  if [ ! -f "$CHASERS_QTH_LOCATORS_FILE" ]
   then
     echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE Check if file exists"
     exit 3
   fi
   
-  if [ ! -r $CHASERS_QTH_LOCATORS_FILE ]
+  if [ ! -r "$CHASERS_QTH_LOCATORS_FILE" ]
   then
     echo "$0: Error: Can not open file $CHASERS_QTH_LOCATORS_FILE for reading"
     exit 3
@@ -79,17 +79,17 @@ function get_distances() {
   echo -e "Date\t|  Time\t|QSO from \t| with call\t | is [km] |"
   while read SUMMIT D4 D5 D6 CALLSIGN D10 D12;
   do
-    SUMMIT_QTH_LOCATOR=`cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT " | awk '{print $2}'`
-    CHASERS_QTH_LOCATOR=`cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}'`
+    SUMMIT_QTH_LOCATOR=$(cat "${SUMMITS_QTH_LOCATORS_FILE}" | grep "$SUMMIT " | awk '{print $2}')
+    CHASERS_QTH_LOCATOR=$(cat "${CHASERS_QTH_LOCATORS_FILE}" | grep "$CALLSIGN " | awk '{print $2}')
     
     if [ -z $CHASERS_QTH_LOCATOR ]
     then
       #	echo "No QTH Locator found for callsign $CALLSIGN"
       echo -n
     else
-      DISTANCE=`./get-distanse-beetween-locators.bash -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8,$11}'`
+      DISTANCE=$("$SCRIPT_DIR/get-distanse-beetween-locators.bash" -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR | awk '{print $7,$8,$11}')
       
-      echo ${SUMMIT_QTH_LOCATOR:+SUMMIT_$SUMMIT} ${CHASERS_QTH_LOCATOR:+EMPTY_CALLSIGN}  $(./get-distanse-beetween-locators.bash -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR) >> ../log/debug.log
+      echo ${SUMMIT_QTH_LOCATOR:+SUMMIT_$SUMMIT} ${CHASERS_QTH_LOCATOR:+EMPTY_CALLSIGN}  $("$SCRIPT_DIR/get-distanse-beetween-locators.bash" -c --show-when-hit-from-cache $SUMMIT_QTH_LOCATOR $CHASERS_QTH_LOCATOR) >> "$ERROR_LOG_FILE"
       echo -en "$D4 $D5 $SUMMIT\t $CALLSIGN\t\t $DISTANCE"
       [ "$REPORT_SHOW" = "true" ] && echo " $D10" || echo ""
       sleep $SLEEP_TIMER
@@ -101,13 +101,13 @@ function get_distances() {
 
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
+echo SCRIPT_DIR $SCRIPT_DIR
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-cd $(dirname $0)
-. load_config_file.bash
-load_config_file
+. "$SCRIPT_DIR/f_log_msg"
+. "$SCRIPT_DIR/load_config_file.bash"
+load_config_file "$SCRIPT_DIR"
 parse_parameters $@
 create_tmp_file
 open_summits_qth_locations_file
 open_chasers_qth_locations_file
 get_distances
-

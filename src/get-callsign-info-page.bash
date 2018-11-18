@@ -198,8 +198,8 @@ function append_callsign_and_locator_to_file() {
   	awk '{print $2}')
   if [[ "${SQUARE:-000000}" =~ [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z] ]]
   then
-    grep "^$CALLSIGN ${SQUARE}$" "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" || \
-    echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
+    grep "^$CALLSIGN ${SQUARE}$" "$CHASERS_QTH_LOCATORS_FILE" || \
+    echo "$CALLSIGN $SQUARE" >> "$CHASERS_QTH_LOCATORS_FILE"
   else
     echo -n "$CALLSIGN ?????? "
     print_locator_not_found_reason "$CALLSIGN_LOG_FILE"
@@ -255,13 +255,11 @@ else
 fi
 }
 
-
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-cd $(dirname $0)
-. f_log_msg
-. load_config_file.bash
-load_config_file
+. "$SCRIPT_DIR/f_log_msg"
+. "$SCRIPT_DIR/load_config_file.bash"
+load_config_file "$SCRIPT_DIR"
 open_cookie_file
 parse_parameters $@
 trap trap_ctrl_c INT

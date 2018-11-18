@@ -89,6 +89,8 @@ function parse_parameters(){
     esac
   done
 
+ set -- "${POSITIONAL[@]}" # restore positional parameters
+
     if [ "$#" -lt 2 ]
   then
     echo "$0: too less parameters."
@@ -96,8 +98,6 @@ function parse_parameters(){
     exit 1
   fi
   
- 
-  set -- "${POSITIONAL[@]}" # restore positional parameters
   qth1="${POSITIONAL[0]}"
   qth2="${POSITIONAL[1]}"
 }
@@ -192,9 +192,10 @@ function print_distance() {
   
 }
 
-cd $(dirname $0)
-. load_config_file.bash
-load_config_file
+SCRIPT_DIR="$(dirname $(readlink -e $0))"
+. "$SCRIPT_DIR/f_log_msg"
+. "$SCRIPT_DIR/load_config_file.bash"
+load_config_file "$SCRIPT_DIR"
 parse_parameters $@
 check_if_callsigns_have_valid_format $qth1 $qth2
 init_cache

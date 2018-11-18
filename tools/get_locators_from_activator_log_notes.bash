@@ -63,9 +63,10 @@ local activator_log="$1"
 cat "$activator_log" | grep -P "\w\w\d\d\w\w" | cut -d, -f8- | sed 's/,,/ /' | sed -r "s/([[:alpha:]]{2}[[:digit:]]{2}[[:alpha:]]{2})|(^\S*)/,&,/g" |  cut -d, -f2,4 | tr  "," " "
 }
 
-cd $(dirname $0)
-. f_log_msg
-. load_config_file.bash
-load_config_file
+this_script_dir=$(dirname $0)
+echo dirname $this_script_dir
+. "$this_script_dir/../src/f_log_msg"
+. "$this_script_dir/../src/load_config_file.bash"
+load_config_file "$this_script_dir"
 parse_parameters $@
 main $@

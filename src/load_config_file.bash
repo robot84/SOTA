@@ -1,9 +1,9 @@
 #!/bin/bash
-CONFIG_FILE="../resources/config.cfg"
 ERROR__CANNOT_LOAD_CONFIG_FILE=100
 
 
 function if_config_file_exists() {
+CONFIG_FILE="$1/../resources/config.cfg"
   if [ ! -r ${CONFIG_FILE} ]
   then
     echo "ERROR: Cannot open config file for reading!"
@@ -18,7 +18,7 @@ function if_config_file_exists() {
 
 
 function load_config_file() {
-  if_config_file_exists
+  if_config_file_exists "$1"
   .  ${CONFIG_FILE}
 }
 

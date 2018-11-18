@@ -35,10 +35,10 @@ function write_locators() {
   sed 's/ /_/g' ${1} | awk '{print $1, $7}' | grep -P '\w+/\w+-\d+ \w\w\d\d\w\w' >> "$(dirname $0)/$SUMMITS_QTH_LOCATORS_FILE"
 }
 
-
-cd $(dirname $0)
-. load_config_file.bash
-load_config_file
+SCRIPT_DIR="$(dirname $(readlink -e $0))"
+. "$SCRIPT_DIR/f_log_msg"
+. "$SCRIPT_DIR/load_config_file.bash"
+load_config_file "$SCRIPT_DIR"
 parse_parameters $@
 open_summits_qth_locators_file_for_writing
 write_locators $@

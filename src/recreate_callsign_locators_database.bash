@@ -73,27 +73,25 @@ function parse_callsign_files() {
       echo  -n "$CALLSIGN ?????? "
 	  print_locator_not_found_reason "$log_file"
     else
-      echo "$CALLSIGN $SQUARE" >> "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
+      echo "$CALLSIGN $SQUARE" >> "$CHASERS_QTH_LOCATORS_FILE"
     fi
   done
   
   TMP_FILE=$(mktemp)
-  cp "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
-  f_log_msg "${SCRIPT_DIR}/$ERROR_LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
-  cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "${SCRIPT_DIR}/$CHASERS_QTH_LOCATORS_FILE"
+  cp "$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
+  f_log_msg "$ERROR_LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
+  cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "$CHASERS_QTH_LOCATORS_FILE"
 #  echo TMP FILE $TMP_FILE
 }
 
 
 
 ############################################## PROGRAM ENTRY POINT #############################
-
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-cd "$SCRIPT_DIR"
-. load_config_file.bash
-. f_log_msg
-load_config_file
+. "$SCRIPT_DIR/f_log_msg"
+. "$SCRIPT_DIR/load_config_file.bash"
+load_config_file "$SCRIPT_DIR"
 parse_parameters $@
 parse_callsign_files
 exit 0
