@@ -1,3 +1,11 @@
+0.4.2
+2018-11-20  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
+
+Added:
+	- get_locators_from_activator_log_notes.bash script
+
+
 
 0.4.1
 2018-11-18  robot84  <zabkiewicz.robert@gmail.com>
