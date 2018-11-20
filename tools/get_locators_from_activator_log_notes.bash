@@ -13,9 +13,7 @@ function parse_parameters() {
     
     case $key in
       -h|--help)
-        echo ""
-        echo "Usage:"
-        echo "${0##*/} <activator_log_file.csv>"
+        echo "Usage: ${0##*/} <activator_log_file.csv>"
         echo "Searching QTH Locators for callsigns in report notes of activator's log."
         echo
 		echo -e "      --help\t\t\t display this help and exit"
@@ -57,14 +55,42 @@ function parse_parameters() {
 # activator_log="${POSITIONAL[0]}"
 }
 
+function change_all_letters_in_file_to_uppercase() {
+sed -ibackup -e 's/.*/\U&/' "$1"
+}
+
+function create_file_with_all_callsigns_which_have_locators_written_in_notes_field_in_activator_log() {
+local activator_log="$1"
+local output_file="$2"
+cat "$activator_log" | \
+grep -P "\w\w\d\d\w\w" | cut -d, -f8- | sed 's/,,/ /' | sed -r "s/([[:alpha:]]{2}[[:digit:]]{2}[[:alpha:]]{2})|(^\S*)/,&,/g" |  cut -d, -f2,4 | tr  "," " " | grep -v "/" | sort | uniq | \
+tr "[[:lower:]]" "[[:upper:]]" > "$output_file"
+
+}
+
 
 function main() {
-local activator_log="$1"
-cat "$activator_log" | grep -P "\w\w\d\d\w\w" | cut -d, -f8- | sed 's/,,/ /' | sed -r "s/([[:alpha:]]{2}[[:digit:]]{2}[[:alpha:]]{2})|(^\S*)/,&,/g" |  cut -d, -f2,4 | tr  "," " "
+
+file_with_all_callsigns_with_locator_in_notes_field_from_activator_log=$(mktemp)
+create_file_with_all_callsigns_which_have_locators_written_in_notes_field_in_activator_log "$1" "$file_with_all_callsigns_with_locator_in_notes_field_from_activator_log"
+change_all_letters_in_file_to_uppercase "$file_with_all_callsigns_with_locator_in_notes_field_from_activator_log"
+change_all_letters_in_file_to_uppercase "$CHASERS_QTH_LOCATORS_FILE"
+
+
+while read qra qth
+do
+	grep $qra "$CHASERS_QTH_LOCATORS_FILE" > /dev/null || \
+	{ 
+	echo "No $qra in database... Adding..."
+
+		 echo $qra $qth >> "$CHASERS_QTH_LOCATORS_FILE" 
+	}
+done < "$file_with_all_callsigns_with_locator_in_notes_field_from_activator_log"
+
+rm $file_with_all_callsigns_with_locator_in_notes_field_from_activator_log
 }
 
 this_script_dir=$(dirname $0)
-echo dirname $this_script_dir
 . "$this_script_dir/../src/f_log_msg"
 . "$this_script_dir/../src/load_config_file.bash"
 load_config_file "$this_script_dir"
