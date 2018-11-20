@@ -91,11 +91,12 @@ function parse_callsign_files() {
 	  compact_callsign_dot_log_file "$log_file" "$CALLSIGN" "$SQUARE"
     fi
   done
-  
+ echo -n
+
   TMP_FILE=$(mktemp)
   cp "$CHASERS_QTH_LOCATORS_FILE" "$TMP_FILE"
   f_log_msg "$ERROR_LOG_FILE" "Notice: Recreating database. Backed up chasers_locators.dat file as $TMP_FILE"
-  cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "$CHASERS_QTH_LOCATORS_FILE"
+  cat "$TMP_FILE" | grep -vE "\?{6}"| sort | uniq > "$CHASERS_QTH_LOCATORS_FILE" && echo Success.
 #  echo TMP FILE $TMP_FILE
 }
 
