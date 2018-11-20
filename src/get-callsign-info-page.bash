@@ -37,7 +37,7 @@ function parse_parameters() {
     f_log_msg "$ERROR_LOG_FILE" ${!ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT@}
     exit $ERROR__NO_CALLSIGN_PASSED_TO_SCRIPT
   fi
-  
+
   POSITIONAL=()
   while [[ $# -gt 0 ]]
   do
@@ -75,7 +75,6 @@ function parse_parameters() {
         shift
         shift
       ;;
-
      --version)
 	  echo "${0##*/} $APP_VER"
         echo "Copyright (C) 2018 SO9ARC"
@@ -105,7 +104,6 @@ function parse_parameters() {
 
 function trap_ctrl_c() {
   echo "** Trapped CTRL-C"
-
   if [ -e "${DB_DIRECTORY}/$CALLSIGN.log" ]
   then
     rm "${DB_DIRECTORY}/$CALLSIGN.log"
