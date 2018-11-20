@@ -3,6 +3,7 @@
 #
 
 DEBUG_ENABLED=no
+LOCATOR_REGEX_PATTERN="[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]"
 
 function parse_parameters() {
   
@@ -50,30 +51,44 @@ function parse_parameters() {
 }
 
 
-function print_locator_not_found_reason() {
-local log_file="$1"
-grep -q "Your Search by Callsign found no results" "$log_file"  && echo "Callsign doesn't exist in http://qrz.com database." && return
-grep -q "Service limit exceeded: Too many lookups" "$log_file"  && ( echo "Too many lookups today for http://qrz.com database. Try tommorow."; rm "$log_file"; ) && return
-echo "User didn't provided his QTH Locator on http://qrz.com"
 
+function compact_callsign_dot_log_file() {
+local log_file="$1"
+local CALLSIGN="$2"
+local square="$3"
+
+if [ ! -z "$square" ]
+then
+echo "Square $square" > "$tmp_dir/$CALLSIGN.log"
+else
+grep -q "Your Search by Callsign found no results" "$log_file"  && ( echo "Your Search by Callsign found no results" > "$tmp_dir/$CALLSIGN.log"; return 0 ) && return
+grep -q "Service limit exceeded: Too many lookups" "$log_file"  &&  ( rm "$log_file"; ) && return
+echo Square > "$tmp_dir/$CALLSIGN.log"
+fi
+}
+
+
+function set_CALLSIGN_var() {
+local log_file="$1"
+local log_file_basename=${log_file##*/}
+CALLSIGN=${log_file_basename%.log}
 }
 
 
 function parse_callsign_files() {
-  local log_file
-  cd "${DB_DIRECTORY}"
-  for log_file in *.log
+  for log_file in "${DB_DIRECTORY}"/*.log
   do
-    CALLSIGN=`echo $log_file | awk -F  "." ' {print $1}'`
-    # alternate pattern to use if original fail for some records
-    # SQUARE=`cat $log_file |grep "Grid Square" | grep -o "Grid Square [A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $3}'`
-    SQUARE=$(cat "$log_file" |grep "Square" | grep -oE "Square[[:space:]]+[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]" | awk '{print $2}')
+  
+  set_CALLSIGN_var "$log_file"
+    SQUARE=$(cat "$log_file" |grep "Square" | grep -oE "Square[[:space:]]+$LOCATOR_REGEX_PATTERN" | awk '{print $2}')
     if [ -z "$SQUARE" ]
     then
-      echo  -n "$CALLSIGN ?????? "
-	  print_locator_not_found_reason "$log_file"
+      echo  -n "."
+	  compact_callsign_dot_log_file "$log_file" "$CALLSIGN" "$SQUARE"
     else
+      echo  -n "."
       echo "$CALLSIGN $SQUARE" >> "$CHASERS_QTH_LOCATORS_FILE"
+	  compact_callsign_dot_log_file "$log_file" "$CALLSIGN" "$SQUARE"
     fi
   done
   
@@ -93,5 +108,10 @@ BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
 . "$SCRIPT_DIR/load_config_file.bash"
 load_config_file "$SCRIPT_DIR"
 parse_parameters $@
+tmp_dir=$(mktemp -d)
+backup_dir=$(mktemp -d tmp.backup_database.XXXXXXXX)
 parse_callsign_files
+mv -t "$backup_dir" "$DB_DIRECTORY"/* 
+mv -t "$DB_DIRECTORY" "$tmp_dir"/* 
+rmdir "$tmp_dir"
 exit 0
