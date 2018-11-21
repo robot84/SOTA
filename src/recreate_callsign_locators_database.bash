@@ -15,8 +15,7 @@ function parse_parameters() {
     case $key in
       -h|--help)
         echo ""
-        echo "Usage:"
-        echo "${0##*/} "
+        echo "Usage: ${0##*/} "
         echo "Write to file QTH locators for all callsigns obtained by get-callsign-info-page.bash"
         echo "Write to stdout callsigns for whom we cannot specify QTH locator."
         echo
@@ -32,13 +31,7 @@ function parse_parameters() {
         exit 1
       ;;
   --version)
-	  echo "${0##*/} $APP_VER"
-	  echo "Copyright (C) 2018 SO9ARC"
-	  echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
-	  echo "This is free software: you are free to change and redistribute it. "
-	  echo "There is NO WARRANTY, to the extent permitted by law."
-	  echo
-	  echo "Written by Robert Zabkiewicz SO9ARC."
+	  print_version_info
 	  exit
 	  ;;
   *)

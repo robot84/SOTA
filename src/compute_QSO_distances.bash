@@ -65,17 +65,8 @@ function parse_parameters() {
 	   print_debug_msg "US miles as units enabled."
 	   shift
 	   ;;
-
        --version)
-	    echo "${0##*/} $APP_VER"
-        echo "Copyright (C) 2018 SO9ARC"
-        echo "License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>."
-        echo "This is free software: you are free to change and redistribute it. "
-        echo "There is NO WARRANTY, to the extent permitted by law."
-		echo
-		echo "Written by Robert Zabkiewicz SO9ARC."
-#		echo "Report bugs to bug@somemail.org"
-#		echo "GNU coreutils home page: <http://kamery-tatry.ovh.net/coreutils/>"
+		print_version_info
         exit
       ;;
       -*)
