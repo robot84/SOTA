@@ -3,6 +3,27 @@
 ERROR__CANNOT_LOAD_CONFIG_FILE=100
 VERBOSE_ENABLED=no
 
+
+function is_valid_locator() {
+local locator_pattern="^[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]$"
+  if [[ ! $1 =~ $locator_pattern ]]
+  then
+    echo "Error: $1 is not a valid locator."
+	echo "locator must be 6 characters length and in format AB01CD"
+    exit 1
+  fi
+}
+
+function is_valid_callsign() {
+local callsign_regex_pattern="([A-Za-z0-9]*/)?[A-Za-z0-9]?[A-Za-z0-9][0-9][A-Za-z][A-Za-z]*(/[A-Za-Z0-9]*)?"
+  if [[ ! $1 =~ $callsign_regex_pattern ]]
+  then
+    echo "Error: $1 is not a valid callsign"
+    exit 1
+  fi
+}
+
+
 function print_debug_msg() {
   [ "$VERBOSE_ENABLED" = "yes" ] && echo "*** $@"
 }
