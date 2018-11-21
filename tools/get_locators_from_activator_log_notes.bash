@@ -101,7 +101,7 @@ rm $file_with_all_callsigns_with_locator_in_notes_field_from_activator_log
 }
 
 this_script_dir=$(dirname $0)
-. "$this_script_dir/../src/load_config_file.bash"
+. "$this_script_dir/../src/common_functions"
 load_config_file "$this_script_dir"
 parse_parameters $@
 main

@@ -71,7 +71,7 @@ local input_file="$1"
 
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
-. "$SCRIPT_DIR/load_config_file.bash"
+. "$SCRIPT_DIR/common_functions"
 load_config_file "$SCRIPT_DIR"
 input_file=""
 parse_parameters $@

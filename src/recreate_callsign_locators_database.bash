@@ -97,7 +97,7 @@ function parse_callsign_files() {
 ############################################## PROGRAM ENTRY POINT #############################
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-. "$SCRIPT_DIR/load_config_file.bash"
+. "$SCRIPT_DIR/common_functions"
 load_config_file "$SCRIPT_DIR"
 parse_parameters $@
 tmp_dir=$(mktemp -d)

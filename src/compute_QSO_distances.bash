@@ -220,7 +220,7 @@ fi
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-. "$SCRIPT_DIR/load_config_file.bash"
+. "$SCRIPT_DIR/common_functions"
 load_config_file "$SCRIPT_DIR"
 qso_log_file=""
 parse_parameters $@
