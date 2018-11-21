@@ -1,15 +1,11 @@
 #!/bin/bash
+
 QTH_LOCATOR_PATTERN="[A-Za-z][A-Za-z][0-9][0-9][A-Za-z][A-Za-z]"
 SHORT_FORMAT_ENABLED=no
 MILES_AS_UNIT=no
 CACHE_ENABLED=no
 VERBOSE_ENABLED=no
 SHOW_HITS_FROM_CACHE_ENABLED=no
-
-function print_debug_msg() {
-  [ $VERBOSE_ENABLED = "yes" ] && echo "*** $@"
-}
-
 
 function parse_parameters(){
  POSITIONAL=()
@@ -103,8 +99,6 @@ function check_if_callsigns_have_valid_format() {
     echo "This is not case-sensitive"
     exit 1
   fi
-  
-  
 }
 
 function init_cache() {
