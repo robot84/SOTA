@@ -1,16 +1,10 @@
 #!/bin/bash
-#
-#
+
 REPORT_SHOW=false
 INPUT_FILE_IS_ACTIVATOR_LOG=no
 INPUT_FILE_IS_CHASER_LOG=no
-VERBOSE_ENABLED=
 UNITS=km
 header_line='Date       Time  QSO from        Callsign (QRA)  QRB'
-
-function print_debug_msg() {
-  [ "$VERBOSE_ENABLED" = "yes" ] && echo "*** $@"
-}
 
 
 function parse_parameters() {
@@ -80,18 +74,15 @@ function parse_parameters() {
       ;;
     esac
   done
-  set -- "${POSITIONAL[@]}" # restore positional parameters
 
-  qso_log_file="$1"
-
-    if [ "$#" -lt 1 ]
+    if [ "${POSITIONAL[@]}" -lt 1 ]
   then
     echo "$0: Mandatory argument ommited."
     echo "Try '${0##*/} --help' for more information."
     exit 1
   fi
   
- 
+  qso_log_file="${POSITIONAL[0]}"
 }
 
 
@@ -229,9 +220,9 @@ fi
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-. "$SCRIPT_DIR/f_log_msg"
 . "$SCRIPT_DIR/load_config_file.bash"
 load_config_file "$SCRIPT_DIR"
+qso_log_file=""
 parse_parameters $@
 trap trap_ctrl_c INT
 create_tmp_file

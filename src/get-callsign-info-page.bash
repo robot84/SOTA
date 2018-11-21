@@ -247,7 +247,6 @@ fi
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
 BASE_DIR="$(dirname \"$SCRIPT_NAME\")"
-. "$SCRIPT_DIR/f_log_msg"
 . "$SCRIPT_DIR/load_config_file.bash"
 load_config_file "$SCRIPT_DIR"
 open_cookie_file

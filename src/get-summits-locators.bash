@@ -71,7 +71,6 @@ local input_file="$1"
 
 
 SCRIPT_DIR="$(dirname $(readlink -e $0))"
-. "$SCRIPT_DIR/f_log_msg"
 . "$SCRIPT_DIR/load_config_file.bash"
 load_config_file "$SCRIPT_DIR"
 input_file=""
