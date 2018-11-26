@@ -14,7 +14,7 @@ function parse_parameters() {
     case $key in
       -h|--help)
         echo "Usage: ${0##*/} [OPTION]... <qso-log.csv>"
-        echo "Compute points gathered from particular callsign 
+        echo "Compute points gathered from particular callsigns
 		based on QSOs extracted from activator/chaser csv log."
         echo
 		echo -e "  -a, --activator-log\t\t input file is .csv activator log downloaded from sotadata.org.uk"
@@ -27,10 +27,10 @@ function parse_parameters() {
     	echo -e "\t\tTo download activator/chaser log:"
 		echo -e "\t\t*login to https://sotadata.org.uk/"
 		echo -e "\t\t*navigate via menu:"
-		echo -e "\t\ta) for activator:"
+		echo -e "\n\t\ta) for activator:"
     	echo -e "\t\tView Results->My results->My Activator Log"
     	echo -e "\t\tAt the bottom of this page click 'Download complete log'"
-		echo -e "\t\tb) for chaser:"
+		echo -e "\n\t\tb) for chaser:"
     	echo -e "\t\tView Results->My results->My Chaser Log"
     	echo -e "\t\tAt the top of the page click 'Download complete log'"
         exit 1
@@ -79,6 +79,14 @@ function trap_ctrl_c() {
 	if [ -f $TMP_FILE ]
 	then
 		rm "$TMP_FILE"
+	fi
+	if [ -f $TMP_FILE2 ]
+	then
+		rm "$TMP_FILE2"
+	fi
+	if [ -f $callsign_list ]
+	then
+		rm "$callsign_list"
 	fi
 
 	exit 1
