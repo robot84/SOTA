@@ -1,3 +1,21 @@
+0.4.3
+2018-11-26  robot84  <zabkiewicz.robert@gmail.com>
+--------------------------------------------------
+
+Added:
+	- Added script compute_points_from_particular_users.bash
+	  which compute sum of points granted for chaser from each activator callsign separatly
+	- Added SUMMIT_POINTS_FILE variable to config.cfg
+	- Added resources/summit_points.dat file with data for all SP summits
+	  File contain database with summits reference numbers and point value (without winter bonus)
+
+Changed:
+	- Fixed run with no parameters (corectly exiting program) for some scripts
+
+Updated:
+	- Callsign database file.
+
+
 0.4.2
 2018-11-20  robot84  <zabkiewicz.robert@gmail.com>
 --------------------------------------------------
