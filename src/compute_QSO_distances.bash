@@ -207,10 +207,10 @@ function get_distances_based_on_chaser_log() {
 function get_distances() {
 if [ $INPUT_FILE_IS_ACTIVATOR_LOG = "yes" ]
 then
-get_distances_based_on_activator_log "$1"
+get_distances_based_on_activator_log
 elif [ $INPUT_FILE_IS_CHASER_LOG = "yes" ]
 then
-get_distances_based_on_chaser_log "$1"
+get_distances_based_on_chaser_log
 else
 echo "You must specify one of these options: -a or -c"
 echo "Exiting..."
