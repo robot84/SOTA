@@ -22,7 +22,7 @@ function parse_parameters() {
 		echo -e "  -c, --chaser-log\t\t input file is .csv chaser log downloaded from sotadata.org.uk"
     	echo -e "  -r, --show-report\t\tShow RS SENT/RCVD report for each QSO."
         echo -e "  -m, --miles\tprint in miles insted of km"
-        echo -e "  -v, --verbose\tprint some application diagnose messages"
+        echo -e "  -v, --verbose\t\t\t print some application diagnose messages"
 		echo
 		echo -e "      --help\t\t\t display this help and exit"
 		echo -e "      --version\t\t\t output version information and exit"
