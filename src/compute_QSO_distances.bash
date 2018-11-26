@@ -75,7 +75,7 @@ function parse_parameters() {
     esac
   done
 
-    if [ "${POSITIONAL[@]}" -lt 1 ]
+    if [ "${#POSITIONAL[@]}" -lt 1 ]
   then
     echo "$0: Mandatory argument ommited."
     echo "Try '${0##*/} --help' for more information."
